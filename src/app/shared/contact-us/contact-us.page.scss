@@ -1,3 +1,23 @@
+textarea {
+  border-style: inset;
+  border-width: 1px;
+}
+.message-input{
+  width: 95%;
+  resize: none;
+  padding-left: 10px;
+  padding-right: 10px;
+  border: 4px solid var(--ion-color-medium);
+  border-color: #4c8dff;
+  outline: none;
+  border-radius: 7px;
+}
+
+.my-padding{
+  padding-left: 5%;
+  padding-right: 5%;
+}
+
 ion-content {
   --background: #fafafa;
   --padding-top: 1.5em;
@@ -5,8 +25,8 @@ ion-content {
   --color: var(--ion-color-dark);
 
   .userImg {
-    height: 70px;
-    width: 70px;
+    height: 100px;
+    width: 100px;
     border-radius: 50%;
     object-fit: cover;
   }
@@ -15,10 +35,12 @@ ion-content {
     --padding-start: 15px;
     --padding-end: 15px;
     --inner-padding-end: 0px;
-    --min-height: 55px;
+    --min-height: 50px;
     --border-radius: 8px;
     border-radius: 8px;
     margin-top: 15px;
+    border: 4px solid var(--ion-color-medium);
+    border-color: #4c8dff;
 
     .itemIcon {
       color: var(--ion-color-primary);
@@ -33,39 +55,3 @@ ion-content {
     }
   }
 }
-.bottom-right {
-  position: absolute;
-  bottom: 5%;
-  right: 5%;
-}
-
-.profile-picture {
-  width: 60px;
-  height: 60px;
-  border-color: #737373;
-  border-radius: 50%;
-}
-.border{
-  box-shadow: none !important;
-}
-
-.star{
-  color: #a2a4ab;
-}
-
-.fullheight {
-  height: 100%;
-}
-.profile{
-  padding-left: 10px;
-  padding-top: 15px;
-}
-.xc {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.item-color{
-  color: #bababa;
-}
-

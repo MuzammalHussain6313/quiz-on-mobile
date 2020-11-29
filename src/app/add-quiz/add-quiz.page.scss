@@ -1,33 +1,49 @@
-.profile-picture {
-  width: 50px;
-  height: 50px;
-  border-color: #737373;
-  border-radius: 50%;
-  padding-top: 5px;
-}
-
 ion-content {
   --background: #fafafa;
   --padding-top: 1.5em;
   --padding-bottom: 1em;
   --color: var(--ion-color-dark);
 
-  .userImg {
-    height: 50px;
-    width: 50px;
-    border-radius: 50%;
-    object-fit: cover;
+  .question {
+      width: 100%;
+      color: #fafafa;
+      border-radius: 20px 20px 20px 20px;
+      padding: 10px 0px 5px 0px;
+      background-color: #fafafa;
   }
-
   .withdrawCard {
     border-radius: 15px;
-    margin: 10px 0px 0px 0px;
+    margin: 20px 0px 0px 0px;
     box-shadow: none;
     --background: white;
-    padding: 0px 0px 0px 0px;
+    padding: 20px 0px 35px 0px;
     --color: #22215B;
-    //min-height: 30vh;
-    min-height: 11vh;
+    min-height: 30vh;
+
+    .inputItem {
+      --min-height: 44px;
+      --background: #FAFAFA;
+      border: 1px solid #e2dfdf;
+      --border-radius: 7px;
+      border-radius: 7px;
+      --padding-start: 15px;
+      --padding-end: 15px;
+      --inner-padding-end: 0px;
+      margin-top: 5px;
+      width: 100%;
+    }
+
+    .qInputCont {
+      --min-height: 55px;
+      --background: #FAFAFA;
+      border: 1px solid #e2dfdf;
+      --border-radius: 7px;
+      border-radius: 7px;
+      --padding-start: 15px;
+      --padding-end: 15px;
+      --inner-padding-end: 0px;
+      margin-top: 15px;
+    }
 
     .inputCont {
       --min-height: 55px;
@@ -56,14 +72,13 @@ ion-content {
     }
   }
 
-  .ionCard {
-    border-radius: 10px;
-    margin: 10px 0px 0px 0px;
-    box-shadow: none;
-    padding: 0px 0px 0px 0px;
-    --color: #22215B;
-    min-height: 11vh;
+  .userImg {
+    height: 100px;
+    width: 100px;
+    border-radius: 50%;
+    object-fit: cover;
   }
+
   .itemCont {
     --padding-start: 15px;
     --padding-end: 15px;
