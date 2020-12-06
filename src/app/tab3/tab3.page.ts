@@ -44,6 +44,7 @@ export class Tab3Page {
                     icon: 'log-out',
                     cssClass: 'secondary',
                     handler: () => {
+                        this.navCtrl.navigateRoot(['']);
                     }
                 },
                 {
