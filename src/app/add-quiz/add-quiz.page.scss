@@ -4,6 +4,12 @@ ion-content {
   --padding-bottom: 1em;
   --color: var(--ion-color-dark);
 
+  .questionCard {
+    text-transform: capitalize;
+    margin: 10px -10px 0px -10px;
+    box-shadow: #bababa;
+    border-radius: 15px;
+  }
   .question {
       width: 100%;
       color: #fafafa;
