@@ -57,6 +57,14 @@ const routes: Routes = [
   {
     path: 'terms',
     loadChildren: () => import('./shared/terms/terms.module').then( m => m.TermsPageModule)
+  },
+  {
+    path: 'result',
+    loadChildren: () => import('./result/result.module').then( m => m.ResultPageModule)
+  },
+  {
+    path: 'students',
+    loadChildren: () => import('./students/students.module').then( m => m.StudentsPageModule)
   }
 ];
 @NgModule({

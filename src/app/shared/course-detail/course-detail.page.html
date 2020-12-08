@@ -4,7 +4,7 @@
             <ion-back-button text="" mode="ios"></ion-back-button>
         </ion-buttons>
         <ion-title>{{'Data Sciences'}}</ion-title>
-        <ion-icon color="primary" slot="end" name="ellipsis-vertical" size="large"></ion-icon>
+        <ion-icon (click)="moreOptions()" color="primary" slot="end" name="ellipsis-vertical" size="large"></ion-icon>
     </ion-toolbar>
 </ion-header>
 
@@ -51,9 +51,9 @@
         </ion-col>
     </ion-row>
 </ion-content>
-<ion-footer>
-    <ion-button routerLink="/add-quiz" expand="block">
-        <ion-icon name="add" size="large"></ion-icon>
-        Add Quiz
-    </ion-button>
-</ion-footer>
+<!--<ion-footer>-->
+<!--    <ion-button routerLink="/add-quiz" expand="block">-->
+<!--        <ion-icon name="add" size="large"></ion-icon>-->
+<!--        Add Quiz-->
+<!--    </ion-button>-->
+<!--</ion-footer>-->
