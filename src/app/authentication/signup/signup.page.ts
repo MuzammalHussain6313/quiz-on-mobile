@@ -1,4 +1,8 @@
 import {Component, OnInit} from '@angular/core';
+import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {Subscription} from 'rxjs';
+import * as firebase from 'firebase';
+import {LoadingController, NavController} from '@ionic/angular';
 
 @Component({
     selector: 'app-signup',
@@ -6,15 +10,22 @@ import {Component, OnInit} from '@angular/core';
     styleUrls: ['./signup.page.scss'],
 })
 export class SignupPage implements OnInit {
-
-    constructor() {
+    constructor(private formBuilder: FormBuilder,
+                private navCtrl: NavController,
+                private loadingCtrl: LoadingController,
+    ) {
     }
 
-    isStudent = false;
+    signupForm: FormGroup;
     passwordType = 'password';
     passwordIcon = 'eye-off';
+    loading: any;
+    roles = [`Teacher`, 'Student'];
+    isStudent = false;
+    isTeacher = false;
 
     ngOnInit() {
+        this.formInitializer();
     }
 
     hideShowPassword() {
@@ -22,24 +33,100 @@ export class SignupPage implements OnInit {
         this.passwordIcon = this.passwordIcon === 'eye-off' ? 'eye' : 'eye-off';
     }
 
+    formInitializer() {
+        const EMAILPATTERN = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/;
+        this.signupForm = this.formBuilder.group({
+            fullName: [null, [Validators.required, Validators.minLength(3), Validators.maxLength(20)]],
+            email: [null, [Validators.required, Validators.pattern(EMAILPATTERN)]],
+            user_name: [null, [Validators.required]],
+            role: [null, Validators.required],
+            regNo: [null, Validators.required],
+            password: ['', Validators.compose([Validators.required, Validators.minLength(6)])],
+            confirm_password: ['', [
+                Validators.required, Validators.minLength(6),
+                this.mismatchedPasswords('password')]],
+            phone: ['+92', [Validators.required, Validators.minLength(10), Validators.maxLength(10)]]
+        });
+    }
+
     async signUpUser() {
+        this.loading = await this.loadingCtrl.create({
+            message: 'please wait...'
+        });
+        this.loading.present();
+        const formData = this.signupForm.value;
+        firebase.auth().createUserWithEmailAndPassword(formData.email, formData.password).then(res => {
+            this.saveUserInRealTime(res.user.uid, res.user.email);
+            const auth = firebase.auth().currentUser;
+            auth.sendEmailVerification().then(() => {
+                alert('We send you a verification email. Please check your email and verify!');
+            });
+            console.log(res);
+            this.navCtrl.navigateRoot(['']);
+            if (this.loading) {
+                this.loading.dismiss();
+            }
+        }).catch(err => {
+            if (this.loading) {
+                this.loading.dismiss();
+            }
+            console.log(err);
+        });
     }
 
     async saveUserInRealTime(uId, mail) {
+        this.loading = await this.loadingCtrl.create({
+            message: 'please wait...'
+        });
+        this.loading.present();
+        const formData = this.signupForm.value;
+        this.decideRole(formData.role);
+        firebase.database().ref(`users/${uId}`).set({
+            fullName: formData.fullName,
+            email: mail,
+            username: formData.user_name,
+            uid: uId,
+            isAdmin: false,
+            isStudent: this.isStudent,
+            isTeacher: this.isTeacher,
+            phone: '0' + formData.phone,
+        });
+        if (this.loading) {
+            this.loading.dismiss();
+        }
     }
 
     mismatchedPasswords(otherControlName: string) {
+        return (control: AbstractControl): { [key: string]: any } => {
+            const otherControl: AbstractControl = control.root.get(otherControlName);
+            if (otherControl) {
+                const subscription: Subscription = otherControl.valueChanges.subscribe(
+                    () => {
+                        control.updateValueAndValidity();
+                        subscription.unsubscribe();
+                    }
+                );
+            }
+            return otherControl && control.value !== otherControl.value
+                ? {match: true}
+                : null;
+        };
     }
 
     decideRole(role) {
-        if (role === 'student') {
-            this.isStudent = true;
-        } else {
+        if (role === 'Teacher') {
+            this.isTeacher = true;
             this.isStudent = false;
+            this.signupForm.controls.regNo.setValue('');
+        } else {
+            this.isTeacher = false;
+            this.isStudent = true;
+            this.signupForm.controls.regNo.setValue('');
         }
     }
 
     changeOption(role) {
+        console.log(role.detail.value);
         this.decideRole(role.detail.value);
     }
 }

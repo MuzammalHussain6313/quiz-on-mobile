@@ -65,6 +65,14 @@ const routes: Routes = [
   {
     path: 'students',
     loadChildren: () => import('./students/students.module').then( m => m.StudentsPageModule)
+  },
+  {
+    path: 'admin-channels',
+    loadChildren: () => import('./admin/channels/channels.module').then( m => m.ChannelsPageModule)
+  },
+  {
+    path: 'admin-chat',
+    loadChildren: () => import('./admin/admin-chat/admin-chat.module').then( m => m.AdminChatPageModule)
   }
 ];
 @NgModule({

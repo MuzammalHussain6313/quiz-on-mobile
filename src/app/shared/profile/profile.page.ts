@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NavController } from '@ionic/angular';
-// import * as firebase from 'firebase';
+import * as firebase from 'firebase';
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.page.html',

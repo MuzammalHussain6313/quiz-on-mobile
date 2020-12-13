@@ -7,14 +7,12 @@ import {IonicModule} from '@ionic/angular';
 import {ResultPageRoutingModule} from './result-routing.module';
 
 import {ResultPage} from './result.page';
-import {ChartsModule} from 'ng2-charts';
 
 @NgModule({
     imports: [
         CommonModule,
         FormsModule,
         IonicModule,
-        ChartsModule,
         ResultPageRoutingModule
     ],
     declarations: [ResultPage]

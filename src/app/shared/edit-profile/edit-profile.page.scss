@@ -1,20 +1,10 @@
 ion-content {
   --background: #fafafa;
-  --padding-top: 0em;
+  --padding-top: 1.5em;
   --padding-bottom: 1em;
   --color: var(--ion-color-dark);
 
-  .withdrawCard {
-    border-radius: 15px;
-    margin: 10px 0px 0px 0px;
-    box-shadow: none;
-    --background: white;
-    padding: 0px 0px 0px 0px;
-    --color: #22215B;
-    //min-height: 30vh;
-    min-height: 10vh;
-  }
-    .userImg {
+  .userImg {
     height: 100px;
     width: 100px;
     border-radius: 50%;
