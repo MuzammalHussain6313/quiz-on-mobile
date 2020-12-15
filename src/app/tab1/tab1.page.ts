@@ -1,5 +1,7 @@
 import {Component} from '@angular/core';
 import {AlertController, NavController} from '@ionic/angular';
+import {DataCollectorService} from '../services/data-collector.service';
+import * as firebase from 'firebase';
 
 @Component({
     selector: 'app-tab1',
@@ -8,12 +10,26 @@ import {AlertController, NavController} from '@ionic/angular';
 })
 export class Tab1Page {
 
+    courses: any = [];
     user: any = {};
     courseName = 'Data Mining';
 
     constructor(private alertController: AlertController,
+                private dataColloector: DataCollectorService,
                 private navCtrl: NavController) {
         this.user.isTeacher = true;
+        this.getAllCourses();
+    }
+
+    getAllCourses() {
+        firebase.database().ref('courses').once('value', snapshot => {
+            this.courses = [];
+            snapshot.forEach((node) => {
+                const course = node.val();
+                this.courses.push(course);
+            });
+            console.log(this.courses);
+        });
     }
 
     async joinClass() {
