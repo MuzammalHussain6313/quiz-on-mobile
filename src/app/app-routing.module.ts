@@ -73,6 +73,14 @@ const routes: Routes = [
   {
     path: 'admin-chat',
     loadChildren: () => import('./admin/admin-chat/admin-chat.module').then( m => m.AdminChatPageModule)
+  },
+  {
+    path: 'quiz-bank',
+    loadChildren: () => import('./quiz-bank/quiz-bank.module').then( m => m.QuizBankPageModule)
+  },
+  {
+    path: 'add-course',
+    loadChildren: () => import('./add-course/add-course.module').then( m => m.AddCoursePageModule)
   }
 ];
 @NgModule({

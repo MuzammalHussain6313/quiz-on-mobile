@@ -35,6 +35,14 @@ export class CourseDetailPage implements OnInit {
           }
         },
         {
+          text: 'Quiz Bank',
+          icon: 'home',
+          cssClass: 'primary',
+          handler: () => {
+            this.navCtrl.navigateForward(['/quiz-bank']);
+          }
+        },
+        {
           text: 'View Students',
           icon: 'people',
           cssClass: 'primary',

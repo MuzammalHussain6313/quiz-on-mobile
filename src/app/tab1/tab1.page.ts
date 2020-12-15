@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {AlertController} from '@ionic/angular';
+import {AlertController, NavController} from '@ionic/angular';
 
 @Component({
     selector: 'app-tab1',
@@ -8,9 +8,12 @@ import {AlertController} from '@ionic/angular';
 })
 export class Tab1Page {
 
+    user: any = {};
     courseName = 'Data Mining';
 
-    constructor(private alertController: AlertController) {
+    constructor(private alertController: AlertController,
+                private navCtrl: NavController) {
+        this.user.isTeacher = true;
     }
 
     async joinClass() {
@@ -43,4 +46,7 @@ export class Tab1Page {
         await alert.present();
     }
 
+    addCourse() {
+        this.navCtrl.navigateForward(['/add-course']);
+    }
 }
