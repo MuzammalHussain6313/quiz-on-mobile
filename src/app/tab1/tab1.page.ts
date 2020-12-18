@@ -1,7 +1,9 @@
 import {Component} from '@angular/core';
 import {AlertController, NavController} from '@ionic/angular';
 import {DataCollectorService} from '../services/data-collector.service';
+import {UtilsService} from '../services/utils.service';
 import * as firebase from 'firebase';
+import {UserService} from '../services/user.service';
 
 @Component({
     selector: 'app-tab1',
@@ -16,8 +18,11 @@ export class Tab1Page {
 
     constructor(private alertController: AlertController,
                 private dataColloector: DataCollectorService,
+                private utils: UtilsService,
+                private service: UserService,
                 private navCtrl: NavController) {
-        this.user.isTeacher = true;
+        // this.user.isTeacher = true;
+        this.user = service.getUser();
         this.getAllCourses();
     }
 
@@ -35,10 +40,10 @@ export class Tab1Page {
     async joinClass() {
         const alert = await this.alertController.create({
             cssClass: 'my-custom-class',
-            header: 'Join ' + this.courseName + ' !!!',
+            header: 'Join New Course !!!',
             inputs: [
                 {
-                    name: 'join',
+                    name: 'code',
                     type: 'text',
                     placeholder: 'Enter Class Code'
                 }
@@ -53,7 +58,8 @@ export class Tab1Page {
                     }
                 }, {
                     text: 'Ok',
-                    handler: () => {
+                    handler: (data) => {
+                        this.joinCourseInDatabase(data.code);
                         console.log('Confirm Ok');
                     }
                 }
@@ -62,7 +68,27 @@ export class Tab1Page {
         await alert.present();
     }
 
+    joinCourseInDatabase(code) {
+        const course = this.courses.filter((c) => c.courseCode === code);
+        if (course.length) {
+            const key = firebase.database().ref('student_course').push().key;
+            firebase.database().ref(`student_course/${key}`).set({
+                courseKey: course[0].key,
+                courseCode: course[0].courseCode,
+                studentId: this.user.uid
+            });
+        } else {
+            this.utils.presentToast('Enter Correct course code...');
+            this.joinClass();
+        }
+    }
+
     addCourse() {
         this.navCtrl.navigateForward(['/add-course']);
+    }
+
+    goToDetail(course) {
+        localStorage.setItem('course', JSON.stringify(course));
+        this.navCtrl.navigateForward(['/course-detail']);
     }
 }

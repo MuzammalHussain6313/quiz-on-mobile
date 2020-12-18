@@ -9,7 +9,7 @@
 <ion-content>
     <ion-row class="ion-justify-content-center">
         <ion-col size="11" class="py-0">
-            <ion-card style="text-transform: capitalize;" routerLink="/course-detail"
+            <ion-card style="text-transform: capitalize;" (click)="goToDetail(iteration)"
                       class="withdrawCard" *ngFor="let iteration of courses let i = index">
                 <ion-card-header>
                     <ion-item>

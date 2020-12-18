@@ -70,7 +70,6 @@ export class LoginPage implements OnInit {
         this.loading.present();
         firebase.database().ref(`users/${id}`).on('value', snapshot => {
             this.service.setUser(snapshot.val());
-            console.log(snapshot.val());
             if (this.loading) {
                 this.loading.dismiss();
             }

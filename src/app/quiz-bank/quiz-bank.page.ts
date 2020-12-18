@@ -1,49 +1,66 @@
-import { Component, OnInit } from '@angular/core';
-import {AlertController} from '@ionic/angular';
+import {Component, OnInit} from '@angular/core';
+import {AlertController, NavController} from '@ionic/angular';
+import * as firebase from 'firebase';
+import {UtilsService} from '../services/utils.service';
 
 @Component({
-  selector: 'app-quiz-bank',
-  templateUrl: './quiz-bank.page.html',
-  styleUrls: ['./quiz-bank.page.scss'],
+    selector: 'app-quiz-bank',
+    templateUrl: './quiz-bank.page.html',
+    styleUrls: ['./quiz-bank.page.scss'],
 })
 export class QuizBankPage implements OnInit {
-  quiz = [
-    {
-      type: 'MCQ',
-      question: 'When pakistan cam into being?',
-      answer: '1947'
-    },
-    {
-      type: 'Short Question',
-      question: 'Describe OOPS in your own word?',
-      answer: 'OOPS is system in which we consider a program is a group of objects in RAM'
-    },
-    {
-      type: 'True/False',
-      question: 'Pakistan Become Atomic power in 2000',
-      answer: 'False'
-    },
-    {
-      type: 'Fill in the Blanks',
-      question: 'Primary key of other table in a reference of record is____________',
-      answer: 'Foreign key'
+    questionBank: any = [];
+    question = {
+        type: '',
+        answer: '',
+        options: [],
+        question: '',
+        marks: '',
+        part1: '',
+        part2: '',
+        blank: '',
+        getReason: '',
+        reason: '',
+    };
+
+    constructor(private alertCtrl: AlertController,
+                private utils: UtilsService,
+                private navCtrl: NavController) {
     }
-  ];
-  question: any;
-  part1 = '';
-  part2 = '';
 
-  constructor(private alertCtrl: AlertController) {
-  }
+    ngOnInit() {
+    }
 
-  ngOnInit() {
-  }
+    expandDonation(quiz: any) {
+        quiz.show = !quiz.show;
+    }
 
-  expandDonation(quiz: any) {
-    quiz.show = !quiz.show;
-  }
+    changeValue(event) {
+        this.question.type = event.detail.value;
+    }
 
-  changeValue(event) {
-    this.question = event.detail.value;
-  }
+    addQuestion() {
+        console.log(this.question);
+        this.questionBank.push(this.question);
+        this.question = {
+            type: '', answer: '', options: [], question: '', marks: '',
+            part1: '', part2: '', blank: '', getReason: '', reason: ''
+        };
+    }
+
+    addQuestionBank() {
+      this.utils.presentLoading('please wait...');
+      const course = JSON.parse(localStorage.getItem('course'));
+      this.questionBank.courseKey = course.key;
+      const key = firebase.database().ref('/quizBanks').push().key;
+      firebase.database().ref(`quizBanks/${key}`).set(this.questionBank).then(res => {
+        console.log(res);
+        this.utils.stopLoading();
+        this.utils.presentToast('Quiz bank successfully Added.');
+        this.navCtrl.back();
+      }).catch(err => {
+        this.utils.stopLoading();
+        console.log(err);
+      });
+    }
 }
