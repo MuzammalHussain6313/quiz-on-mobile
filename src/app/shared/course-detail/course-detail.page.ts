@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {ActionSheetController, AlertController, NavController} from '@ionic/angular';
+import {ActionSheetController, NavController} from '@ionic/angular';
 
 @Component({
   selector: 'app-course-detail',

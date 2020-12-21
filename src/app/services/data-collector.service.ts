@@ -7,21 +7,28 @@ import * as firebase from 'firebase';
 export class DataCollectorService {
 
     courses: any = [];
-    users: any = [];
+    students: any = [];
+    teachers: any = [];
+    quizBanks = [];
 
     constructor() {
         this.getAllCourses();
         this.getAllUsers();
+        this.getAllQuizBanks();
     }
 
     getAllUsers() {
         firebase.database().ref('users').once('value', snapshot => {
-            this.users = [];
+            this.students = [];
+            this.teachers = [];
             snapshot.forEach((node) => {
                 const user = node.val();
-                this.users.push(user);
+                if (user.isStudent) {
+                    this.students.push(user);
+                } else {
+                    this.teachers.push(user);
+                }
             });
-            console.log(this.users);
         });
     }
 
@@ -33,6 +40,20 @@ export class DataCollectorService {
                 this.courses.push(course);
             });
             console.log(this.courses);
+        });
+    }
+
+    getAllQuizBanks() {
+        firebase.database().ref('quizBanks').once('value', snapshot => {
+            this.quizBanks = [];
+            snapshot.forEach((node) => {
+                const bank = node.val();
+                bank.key = node.val().key;
+                this.quizBanks.push(bank);
+            });
+        }).then(res => {
+        }).catch(err => {
+            console.log(err);
         });
     }
 }
