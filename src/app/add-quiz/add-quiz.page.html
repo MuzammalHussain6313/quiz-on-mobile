@@ -80,7 +80,7 @@
                       </ion-item>
                     </ion-item>
                     <ion-item class="inputItem">
-                      <ion-input formControlName="marks" type="text" placeholder="Marks"></ion-input>
+                      <ion-input formControlName="marks" type="number" placeholder="Marks"></ion-input>
                     </ion-item>
                     </form>
                   </div>
@@ -102,7 +102,7 @@
                       </ion-item>
                     </ion-item>
                     <ion-item class="inputItem">
-                      <ion-input formControlName="marks" type="text" placeholder="Marks"></ion-input>
+                      <ion-input formControlName="marks" type="number" placeholder="Marks"></ion-input>
                     </ion-item>
                     </form>
                   </div>
@@ -128,7 +128,7 @@
                       </ion-select>
                     </ion-item>
                     <ion-item class="inputItem">
-                      <ion-input formControlName="marks" type="text" placeholder="Marks"></ion-input>
+                      <ion-input formControlName="marks" type="number" placeholder="Marks"></ion-input>
                     </ion-item>
                     </form>
                   </div>
@@ -144,14 +144,14 @@
                                     placeholder="Enter Correct Answer"></ion-textarea>
                     </ion-item>
                     <ion-item class="inputItem">
-                      <ion-input formControlName="marks" type="text" placeholder="Marks"></ion-input>
+                      <ion-input formControlName="marks" type="number" placeholder="Marks"></ion-input>
                     </ion-item>
                     </form>
                   </div>
                 <div style="padding-top: 15px">
                   <ion-row>
                     <ion-col size="6">
-                      <ion-button [disabled]="true" *ngIf="!type" (click)="addQuestion()" color="primary" type="submit" expand="block">Add Question
+                      <ion-button [disabled]="true" *ngIf="!type" color="primary" type="submit" expand="block">Add Question
                       </ion-button>
                       <ion-button [disabled]="!mcqForm.valid" *ngIf="type === 'mcqs'" (click)="addMCQ()" color="primary" type="submit" expand="block">Add Question
                       </ion-button>

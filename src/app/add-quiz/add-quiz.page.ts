@@ -3,6 +3,7 @@ import {AlertController, NavController} from '@ionic/angular';
 import {DataCollectorService} from '../services/data-collector.service';
 import {UtilsService} from '../services/utils.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import * as firebase from 'firebase';
 
 @Component({
     selector: 'app-add-quiz',
@@ -11,6 +12,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 })
 export class AddQuizPage implements OnInit {
 
+    quiz: any = {};
     questions: any = [];
     quizForm: FormGroup;
     mcqForm: FormGroup;
@@ -18,6 +20,7 @@ export class AddQuizPage implements OnInit {
     FIBForm: FormGroup;
     TFForm: FormGroup;
     type: string;
+    marks = 0;
 
     constructor(private alertCtrl: AlertController,
                 private navCtrl: NavController,
@@ -80,9 +83,11 @@ export class AddQuizPage implements OnInit {
         const questions = JSON.parse(localStorage.getItem('selectedQuestions'));
         if (questions.length) {
             for (const q of questions) {
+                this.marks = this.marks + q.marks;
                 this.questions.push(q);
             }
-            console.log(this.questions);
+            this.quizForm.controls.questions.setValue(this.questions);
+            console.log('questions', this.questions);
         }
     }
 
@@ -92,50 +97,15 @@ export class AddQuizPage implements OnInit {
 
     changeValue(event) {
         this.type = event.detail.value;
-        // this.questionForm.controls.question.setValue(null);
-        // this.questionForm.controls.marks.setValue(null);
-        // this.questionForm.controls.answer.setValue(null);
-        // if (this.question.type === 'mcqs') {
-        //     this.questionForm.controls.part1.setValue('');
-        //     this.questionForm.controls.part2.setValue('');
-        //     this.questionForm.controls.blank.setValue('');
-        //     this.questionForm.controls.getReason.setValue('');
-        //     this.questionForm.controls.reason.setValue('');
-        //     this.questionForm.controls.optionA.setValue(null);
-        //     this.questionForm.controls.optionB.setValue(null);
-        //     this.questionForm.controls.optionC.setValue(null);
-        //     this.questionForm.controls.optionD.setValue(null);
-        // } else if (this.question.type === 'shortQuestions') {
-        //     this.questionForm.controls.part1.setValue('');
-        //     this.questionForm.controls.part2.setValue('');
-        //     this.questionForm.controls.blank.setValue('');
-        //     this.questionForm.controls.getReason.setValue('');
-        //     this.questionForm.controls.reason.setValue('');
-        //     this.questionForm.controls.optionA.setValue('');
-        //     this.questionForm.controls.optionB.setValue('');
-        //     this.questionForm.controls.optionC.setValue('');
-        //     this.questionForm.controls.optionD.setValue('');
-        // } else if (this.question.type === 'trueFalse') {
-        //     this.questionForm.controls.part1.setValue('');
-        //     this.questionForm.controls.part2.setValue('');
-        //     this.questionForm.controls.blank.setValue('');
-        //     this.questionForm.controls.getReason.setValue(null);
-        //     this.questionForm.controls.reason.setValue(null);
-        //     this.questionForm.controls.optionA.setValue('True');
-        //     this.questionForm.controls.optionB.setValue('False');
-        //     this.questionForm.controls.optionC.setValue('');
-        //     this.questionForm.controls.optionD.setValue('');
-        // } else {
-        //     this.questionForm.controls.part1.setValue(null);
-        //     this.questionForm.controls.part2.setValue(null);
-        //     this.questionForm.controls.blank.setValue(null);
-        //     this.questionForm.controls.optionA.setValue('');
-        //     this.questionForm.controls.optionB.setValue('');
-        //     this.questionForm.controls.optionC.setValue('');
-        //     this.questionForm.controls.optionD.setValue('');
-        //     this.questionForm.controls.getReason.setValue('');
-        //     this.questionForm.controls.reason.setValue('');
-        // }
+        if (this.type === 'mcqs') {
+            this.mcqForm.controls.type.setValue(this.type);
+        } else if (this.type === 'shortQuestions') {
+            this.shortQForm.controls.type.setValue(this.type);
+        } else if (this.type === 'fillInBlanks') {
+            this.FIBForm.controls.type.setValue(this.type);
+        } else if (this.type === 'trueFalse') {
+            this.TFForm.controls.type.setValue(this.type);
+        }
     }
 
     async presentAlert(question: any) {
@@ -152,70 +122,88 @@ export class AddQuizPage implements OnInit {
         await alert.present();
     }
 
-    addQuestion() {
-        debugger
-        console.log(this.shortQForm.value);
-        console.log(this.FIBForm.value);
-        console.log(this.TFForm.value);
-        console.log(this.mcqForm.value);
-        // console.log(this.questionForm.value);
-        // this.marks = this.marks + this.question.marks;
-        // if (this.marks > this.quiz.totalMarks) {
-        //     this.marks = this.marks - this.question.marks;
-        //     this.utils.presentAlert('Marks Limit Exceeded. Please increase the total marks to add more questions.');
-        // } else {
-        //     this.checkQuestionValid();
-        //     if (this.questionValid) {
-        //         this.quiz.questions.push(this.question);
-        //         this.question = {
-        //             type: '', answer: '', options: [], question: '', marks: 0,
-        //             part1: '', part2: '', blank: '', getReason: '', reason: ''
-        //         };
-        //     } else {
-        //         this.utils.presentAlert('Please select all required values.');
-        //     }
-        // }
-    }
-
     addFromBank() {
         this.navCtrl.navigateForward(['/quiz-bank']);
     }
 
     addQuiz() {
-        debugger
         console.log(this.quizForm.value);
-        // this.utils.presentLoading('please wait...');
-        // const key = firebase.database().ref('/quizzes').push().key;
-        // this.quiz.key = key;
-        // const course = JSON.parse(localStorage.getItem('course'));
-        // this.quiz.courseKey = course.key;
-        // firebase.database().ref(`/quizzes/${key}`).set(this.quiz).then(res => {
-        //     localStorage.setItem('selectedQuestions', null);
-        //     this.utils.stopLoading();
-        //     this.utils.presentToast('Quiz Added successfully. Thanks For using Quiz App.');
-        // }).catch(err => {
-        //     console.log(err);
-        //     this.utils.stopLoading();
-        // });
+        console.log(this.questions);
+        this.utils.presentLoading('please wait...');
+        const key = firebase.database().ref('/quizzes').push().key;
+        this.quiz.key = key;
+        this.quiz.questions = this.questions;
+        this.quiz.title = this.quizForm.value.title;
+        this.quiz.date = this.quizForm.value.date;
+        this.quiz.time = this.quizForm.value.time;
+        this.quiz.totalMarks = this.quizForm.value.totalMarks;
+        const course = JSON.parse(localStorage.getItem('course'));
+        this.quiz.courseKey = course.key;
+        firebase.database().ref(`/quizzes/${key}`).set(this.quiz).then(res => {
+            localStorage.setItem('selectedQuestions', null);
+            this.utils.stopLoading();
+            this.utils.presentToast('Quiz Added successfully. Thanks For using Quiz App.');
+        }).catch(err => {
+            console.log(err);
+            this.utils.stopLoading();
+        });
     }
 
     addMCQ() {
-
+        if ((this.mcqForm.value.marks + this.marks) > this.quizForm.value.totalMarks) {
+            this.utils.presentAlert('Marks Limit Exceeded. Please increase the total marks to add more questions.');
+        } else {
+            this.marks = this.marks + this.mcqForm.value.marks;
+            this.questions.push(this.mcqForm.value);
+            this.quizForm.controls.questions.setValue(this.questions);
+            this.mcqForm.reset();
+            this.shortQForm.reset();
+            this.FIBForm.reset();
+            this.TFForm.reset();
+        }
     }
 
     addFIB() {
-
+        console.log(this.FIBForm.value);
+        if ((this.FIBForm.value.marks + this.marks) > this.quizForm.value.totalMarks) {
+            this.utils.presentAlert('Marks Limit Exceeded. Please increase the total marks to add more questions.');
+        } else {
+            this.marks = this.marks + this.FIBForm.value.marks;
+            this.questions.push(this.FIBForm.value);
+            this.quizForm.controls.questions.setValue(this.questions);
+            this.mcqForm.reset();
+            this.shortQForm.reset();
+            this.FIBForm.reset();
+            this.TFForm.reset();
+        }
     }
 
     addSQ() {
-
+        console.log(this.shortQForm.value);
+        if ((this.shortQForm.value.marks + this.marks) > this.quizForm.value.totalMarks) {
+            this.utils.presentAlert('Marks Limit Exceeded. Please increase the total marks to add more questions.');
+        } else {
+            this.marks = this.marks + this.shortQForm.value.marks;
+            this.questions.push(this.shortQForm.value);
+            this.quizForm.controls.questions.setValue(this.questions);
+            this.mcqForm.reset();
+            this.shortQForm.reset();
+            this.FIBForm.reset();
+            this.TFForm.reset();
+        }
     }
 
     addTF() {
-
-    }
-
-    checkSpace() {
-
+        if ((this.TFForm.value.marks + this.marks) > this.quizForm.value.totalMarks) {
+            this.utils.presentAlert('Marks Limit Exceeded. Please increase the total marks to add more questions.');
+        } else {
+            this.marks = this.marks + this.TFForm.value.marks;
+            this.questions.push(this.TFForm.value);
+            this.quizForm.controls.questions.setValue(this.questions);
+            this.mcqForm.reset();
+            this.shortQForm.reset();
+            this.FIBForm.reset();
+            this.TFForm.reset();
+        }
     }
 }

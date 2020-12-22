@@ -19,93 +19,126 @@
             <ion-row class="justify-content-center">
               <ion-col size="12">
                 <div class="ion-padding">
-                  <p style="padding-left: 20px" class="font-15 mt-0 bold">Questions</p>
                   <ion-item lines="none" mode="md" class="inputCont">
                     <ion-label position="floating" class="my-0 gray">Type</ion-label>
-                    <ion-select placeholder="Select Question type" (ionChange)="changeValue($event)">
+                    <ion-select [(ngModel)]="type" placeholder="Select Question type" (ionChange)="changeValue($event)">
                       <ion-select-option value="mcqs">MCQs</ion-select-option>
                       <ion-select-option value="fillInBlanks">Fill in blanks</ion-select-option>
                       <ion-select-option value="shortQuestions">Short Questions</ion-select-option>
                       <ion-select-option value="trueFalse">True/False</ion-select-option>
                     </ion-select>
                   </ion-item>
-                  <div *ngIf="question.type === 'mcqs'">
-                    <ion-item lines="none" mode="md" class="inputCont">
-                      <ion-label position="floating" class="my-0 gray">Question</ion-label>
-                      <ion-input [(ngModel)]="question.question" type="text" placeholder=" Enter Question"></ion-input>
-                    </ion-item>
-                    <ion-item lines="none" class="qInputCont">
-                      <ion-label position="floating" class="my-0 gray">Enter options</ion-label>
-                      <ion-item class="inputItem">
-                        <ion-label>A. </ion-label>
-                        <ion-input [(ngModel)]="question.options[0]" type="text" placeholder="Option A"></ion-input>
+                  <div *ngIf="type === 'mcqs'">
+                    <form [formGroup]="mcqForm">
+                      <ion-item lines="none" mode="md" class="inputCont">
+                        <ion-label position="floating" class="my-0 gray">Question</ion-label>
+                        <ion-input formControlName="question" type="text" placeholder=" Enter Question"></ion-input>
+                      </ion-item>
+                      <ion-item lines="none" class="qInputCont">
+                        <ion-label position="floating" class="my-0 gray">Enter options</ion-label>
+                        <ion-item class="inputItem">
+                          <ion-label>A.</ion-label>
+                          <ion-input formControlName="optionA" type="text" placeholder="Enter option A"></ion-input>
+                        </ion-item>
+                        <ion-item class="inputItem">
+                          <ion-label>B.</ion-label>
+                          <ion-input formControlName="optionB" type="text" placeholder="Enter option B"></ion-input>
+                        </ion-item>
+                        <ion-item class="inputItem">
+                          <ion-label>C.</ion-label>
+                          <ion-input formControlName="optionC" type="text" placeholder="Enter option C"></ion-input>
+                        </ion-item>
+                        <ion-item class="inputItem">
+                          <ion-label>D.</ion-label>
+                          <ion-input formControlName="optionD" type="text" placeholder="Enter option D"></ion-input>
+                        </ion-item>
+                        <ion-item style="margin-bottom: 10px" lines="none" mode="md" class="inputItem">
+                          <ion-label position="floating" class="my-0 gray">Select Correct Option</ion-label>
+                          <ion-select formControlName="answer" placeholder="Select Correct Answer">
+                            <ion-select-option *ngFor="let option of ['A', 'B','C','D']" value="{{option}}">{{option}}
+                            </ion-select-option>
+                          </ion-select>
+                        </ion-item>
                       </ion-item>
                       <ion-item class="inputItem">
-                        <ion-label>B. </ion-label>
-                        <ion-input [(ngModel)]="question.options[1]" type="text" placeholder="Option B"></ion-input>
+                        <ion-input formControlName="marks" type="number" placeholder="Marks"></ion-input>
+                      </ion-item>
+                    </form>
+                  </div>
+                  <div *ngIf="type === 'fillInBlanks'">
+                    <form [formGroup]="FIBForm">
+                      <ion-item lines="none" class="qInputCont">
+                        <ion-label position="floating" class="my-0 gray">Question</ion-label>
+                        <ion-item class="inputItem">
+                          <ion-input formControlName="part1" type="text"
+                                     placeholder="Enter pert 1 before blank space"></ion-input>
+                        </ion-item>
+                        <ion-item class="inputItem">
+                          <ion-input formControlName="part2" type="text"
+                                     placeholder="Enter Part 2 after blank space"></ion-input>
+                        </ion-item>
+                        <ion-item style="margin-bottom: 10px" lines="none" class="inputItem">
+                          <ion-input formControlName="blank" type="text"
+                                     placeholder="Enter answer blank space"></ion-input>
+                        </ion-item>
                       </ion-item>
                       <ion-item class="inputItem">
-                        <ion-label>C. </ion-label>
-                        <ion-input [(ngModel)]="question.options[2]" type="text" placeholder="Option C"></ion-input>
+                        <ion-input formControlName="marks" type="number" placeholder="Marks"></ion-input>
                       </ion-item>
-                      <ion-item class="inputItem">
-                        <ion-label>D. </ion-label>
-                        <ion-input [(ngModel)]="question.options[3]" type="text" placeholder="Option D"></ion-input>
+                    </form>
+                  </div>
+                  <div *ngIf="type === 'trueFalse'">
+                    <form [formGroup]="TFForm">
+                      <ion-item lines="none" mode="md" class="inputCont">
+                        <ion-label position="floating" class="my-0 gray">Question</ion-label>
+                        <ion-input formControlName="question" type="text" placeholder=" Enter Question"></ion-input>
                       </ion-item>
-                      <ion-item style="margin-bottom: 10px" lines="none" mode="md" class="inputItem">
-                        <ion-label position="floating" class="my-0 gray">Select Correct Option</ion-label>
-                        <ion-select [(ngModel)]="question.answer" placeholder="Select Correct Answer">
-                          <ion-select-option *ngFor = "let option of ['A', 'B','C','D']" value="{{option}}">{{option}}</ion-select-option>
+                      <ion-item lines="none" mode="md" class="inputCont">
+                        <ion-label position="floating" class="my-0 gray">Correct Answer</ion-label>
+                        <ion-select formControlName="answer" placeholder="Select Correct Answer">
+                          <ion-select-option value="true">True</ion-select-option>
+                          <ion-select-option value="false">False</ion-select-option>
                         </ion-select>
                       </ion-item>
-                    </ion-item>
-                  </div>
-                  <div *ngIf="question.type === 'fillInBlanks'">
-                    <ion-item lines="none" class="qInputCont">
-                      <ion-label position="floating" class="my-0 gray">Question</ion-label>
-                      <ion-item class="inputItem">
-                        <ion-input [(ngModel)]="question.part1" type="text" placeholder="Enter pert 1 before blank space"></ion-input>
+                      <ion-item lines="none" mode="md" class="inputCont">
+                        <ion-label position="floating" class="my-0 gray">Do You want a reason for True and False answer?
+                        </ion-label>
+                        <ion-select formControlName="getReason" placeholder="Select Your Choice">
+                          <ion-select-option value="yes">Yes</ion-select-option>
+                          <ion-select-option value="no">No</ion-select-option>
+                        </ion-select>
                       </ion-item>
                       <ion-item class="inputItem">
-                        <ion-input [(ngModel)]="question.part2" type="text" placeholder="Enter Part 2 after blank space"></ion-input>
+                        <ion-input formControlName="marks" type="number" placeholder="Marks"></ion-input>
                       </ion-item>
-                      <ion-item style="margin-bottom: 10px" lines="none" class="inputItem">
-                        <ion-input [(ngModel)]="question.blank" type="text" placeholder="Enter answer blank space"></ion-input>
+                    </form>
+                  </div>
+                  <div *ngIf="type === 'shortQuestions'">
+                    <form [formGroup]="shortQForm">
+                      <ion-item lines="none" mode="md" class="inputCont">
+                        <ion-label position="floating" class="my-0 gray">Question</ion-label>
+                        <ion-input formControlName="question" type="text" placeholder=" Enter Question"></ion-input>
                       </ion-item>
-                    </ion-item>
-                  </div>
-                  <div *ngIf="question.type === 'trueFalse'">
-                    <ion-item lines="none" mode="md" class="inputCont">
-                      <ion-label position="floating" class="my-0 gray">Question</ion-label>
-                      <ion-input [(ngModel)]="question.question" type="text" placeholder=" Enter Question"></ion-input>
-                    </ion-item>
-                    <ion-item lines="none" mode="md" class="inputCont">
-                      <ion-label position="floating" class="my-0 gray">Correct Answer</ion-label>
-                      <ion-select [(ngModel)]="question.answer" placeholder="Select Correct Answer">
-                        <ion-select-option value="yes">Yes</ion-select-option>
-                        <ion-select-option value="no">No</ion-select-option>
-                      </ion-select>
-                    </ion-item>
-                    <ion-item lines="none" mode="md" class="inputCont">
-                      <ion-label position="floating" class="my-0 gray">Do You want a reason for True and False answer?</ion-label>
-                      <ion-select [(ngModel)]="question.getReason" placeholder="Select Your Choice">
-                        <ion-select-option value="yes">Yes</ion-select-option>
-                        <ion-select-option value="no">No</ion-select-option>
-                      </ion-select>
-                    </ion-item>
-                  </div>
-                  <div *ngIf="question.type === 'shortQuestions'">
-                    <ion-item lines="none" mode="md" class="inputCont">
-                      <ion-label position="floating" class="my-0 gray">Question</ion-label>
-                      <ion-input [(ngModel)]="question.question" type="text" placeholder=" Enter Question"></ion-input>
-                    </ion-item>
-                    <ion-item lines="none" mode="md" class="inputCont">
-                      <ion-label position="floating" class="my-0 gray">Answer</ion-label>
-                      <ion-textarea [(ngModel)]="question.answer" rows="5" type="text" placeholder="Enter Correct Answer" ></ion-textarea>
-                    </ion-item>
+                      <ion-item lines="none" mode="md" class="inputCont">
+                        <ion-label position="floating" class="my-0 gray">Answer</ion-label>
+                        <ion-textarea formControlName="answer" rows="5" type="text"
+                                      placeholder="Enter Correct Answer"></ion-textarea>
+                      </ion-item>
+                      <ion-item class="inputItem">
+                        <ion-input formControlName="marks" type="number" placeholder="Marks"></ion-input>
+                      </ion-item>
+                    </form>
                   </div>
                   <div style="padding-top: 15px">
-                    <ion-button (click)="addQuestion()" color="primary" type="submit" expand="block">Add Question
+                    <ion-button [disabled]="true" *ngIf="!type" color="primary" type="submit" expand="block">Add Question
+                    </ion-button>
+                    <ion-button [disabled]="!mcqForm.valid" *ngIf="type === 'mcqs'" (click)="addMCQ()" color="primary" type="submit" expand="block">Add Question
+                    </ion-button>
+                    <ion-button [disabled]="!FIBForm.valid" *ngIf="type === 'fillInBlanks'" (click)="addFIB()" color="primary" type="submit" expand="block">Add Question
+                    </ion-button>
+                    <ion-button [disabled]="!shortQForm.valid" *ngIf="type === 'shortQuestions'" (click)="addSQ()" color="primary" type="submit" expand="block">Add Question
+                    </ion-button>
+                    <ion-button [disabled]="!TFForm.valid" *ngIf="type === 'trueFalse'" (click)="addTF()" color="primary" type="submit" expand="block">Add Question
                     </ion-button>
                   </div>
                 </div>

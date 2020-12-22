@@ -3,6 +3,7 @@ import {AlertController, NavController} from '@ionic/angular';
 import * as firebase from 'firebase';
 import {UtilsService} from '../services/utils.service';
 import {DataCollectorService} from '../services/data-collector.service';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 
 @Component({
     selector: 'app-quiz-bank',
@@ -12,30 +13,61 @@ import {DataCollectorService} from '../services/data-collector.service';
 export class QuizBankPage implements OnInit {
     selectedQuestions: any = [];
     questions: any = [];
+    quizForm: FormGroup;
+    mcqForm: FormGroup;
+    shortQForm: FormGroup;
+    FIBForm: FormGroup;
+    TFForm: FormGroup;
     questionBank: any = {};
-    question = {
-        type: '',
-        answer: '',
-        options: [],
-        question: '',
-        marks: '',
-        part1: '',
-        part2: '',
-        blank: '',
-        getReason: '',
-        reason: '',
-    };
 
+    type: any;
     bank: any;
 
     constructor(private alertCtrl: AlertController,
                 private dataCollector: DataCollectorService,
                 private utils: UtilsService,
+                private formBuilder: FormBuilder,
                 private navCtrl: NavController) {
     }
 
     ngOnInit() {
+        this.questionFormInitializer();
         this.loadData();
+    }
+
+    questionFormInitializer() {
+        this.mcqForm = this.formBuilder.group({
+            type: ['mcqs', [Validators.required]],
+            answer: [null, [Validators.required]],
+            optionA: [null, [Validators.required]],
+            optionB: [null, [Validators.required]],
+            optionC: [null, [Validators.required]],
+            optionD: [null, [Validators.required]],
+            question: [null, [Validators.required]],
+            marks: [null, [Validators.required]],
+        });
+        this.shortQForm = this.formBuilder.group({
+            type: ['shortQuestions', [Validators.required]],
+            answer: [null, [Validators.required]],
+            question: [null, [Validators.required]],
+            marks: [null, [Validators.required]],
+        });
+        this.TFForm = this.formBuilder.group({
+            type: ['trueFalse', [Validators.required]],
+            answer: [null, [Validators.required]],
+            optionA: ['True', [Validators.required]],
+            optionB: ['False', [Validators.required]],
+            question: [null, [Validators.required]],
+            marks: [null, [Validators.required]],
+            getReason: [null, [Validators.required]]
+        });
+        this.FIBForm = this.formBuilder.group({
+            type: ['fillInBlanks', [Validators.required]],
+            marks: [null, [Validators.required]],
+            part1: [null, [Validators.required]],
+            part2: [null, [Validators.required]],
+            blank: [null, [Validators.required]]
+        });
     }
 
     loadData() {
@@ -55,16 +87,16 @@ export class QuizBankPage implements OnInit {
     }
 
     changeValue(event) {
-        this.question.type = event.detail.value;
-    }
-
-    addQuestion() {
-        console.log(this.question);
-        this.questions.push(this.question);
-        this.question = {
-            type: '', answer: '', options: [], question: '', marks: '',
-            part1: '', part2: '', blank: '', getReason: '', reason: ''
-        };
+        this.type = event.detail.value;
+        if (this.type === 'mcqs') {
+            this.mcqForm.controls.type.setValue(this.type);
+        } else if (this.type === 'shortQuestions') {
+            this.shortQForm.controls.type.setValue(this.type);
+        } else if (this.type === 'fillInBlanks') {
+            this.FIBForm.controls.type.setValue(this.type);
+        } else if (this.type === 'trueFalse') {
+            this.TFForm.controls.type.setValue(this.type);
+        }
     }
 
     addToCart(question, i) {
@@ -104,5 +136,41 @@ export class QuizBankPage implements OnInit {
     saveSelectedQuestions() {
         localStorage.setItem('selectedQuestions', JSON.stringify(this.selectedQuestions));
         this.navCtrl.back();
+    }
+
+    addMCQ() {
+        debugger
+        this.questions.push(this.mcqForm.value);
+        this.mcqForm.reset();
+        this.shortQForm.reset();
+        this.FIBForm.reset();
+        this.TFForm.reset();
+    }
+
+    addFIB() {
+        debugger
+        this.questions.push(this.FIBForm.value);
+        this.mcqForm.reset();
+        this.shortQForm.reset();
+        this.FIBForm.reset();
+        this.TFForm.reset();
+    }
+
+    addSQ() {
+        debugger
+        this.questions.push(this.shortQForm.value);
+        this.mcqForm.reset();
+        this.shortQForm.reset();
+        this.FIBForm.reset();
+        this.TFForm.reset();
+    }
+
+    addTF() {
+        debugger
+        this.questions.push(this.TFForm.value);
+        this.mcqForm.reset();
+        this.shortQForm.reset();
+        this.FIBForm.reset();
+        this.TFForm.reset();
     }
 }
