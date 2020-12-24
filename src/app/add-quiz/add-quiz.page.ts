@@ -143,6 +143,7 @@ export class AddQuizPage implements OnInit {
             localStorage.setItem('selectedQuestions', null);
             this.utils.stopLoading();
             this.utils.presentToast('Quiz Added successfully. Thanks For using Quiz App.');
+            this.navCtrl.back();
         }).catch(err => {
             console.log(err);
             this.utils.stopLoading();

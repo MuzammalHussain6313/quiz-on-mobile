@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ActionSheetController, NavController} from '@ionic/angular';
 import {DataCollectorService} from '../../services/data-collector.service';
+import {UtilsService} from '../../services/utils.service';
 
 @Component({
     selector: 'app-course-detail',
@@ -17,6 +18,7 @@ export class CourseDetailPage implements OnInit {
 
     constructor(private navCtrl: NavController,
                 private dataCollector: DataCollectorService,
+                private utils: UtilsService,
                 private actionCtrl: ActionSheetController) {
     }
 
@@ -83,13 +85,20 @@ export class CourseDetailPage implements OnInit {
         await alert.present();
     }
 
-  goToDetail(quiz) {
-    localStorage.setItem('oldQuiz', JSON.stringify(quiz));
-    this.navCtrl.navigateForward(['/old-quiz']);
-  }
+    goToDetail(quiz) {
+        localStorage.setItem('oldQuiz', JSON.stringify(quiz));
+        this.navCtrl.navigateForward(['/old-quiz']);
+    }
 
-  attemptQuiz(quiz) {
-    localStorage.setItem('attemptQuiz', JSON.stringify(quiz));
-    this.navCtrl.navigateForward(['/attempt-quiz']);
-  }
+    attemptQuiz(quiz) {
+
+        const varDate = new Date(quiz.date);
+        const today = new Date();
+        if (varDate === today || varDate <= today) {
+          localStorage.setItem('attemptQuiz', JSON.stringify(quiz));
+          this.navCtrl.navigateForward(['/attempt-quiz']);
+        } else {
+          this.utils.presentAlert('Please wait until quiz time start. Thanks');
+        }
+    }
 }

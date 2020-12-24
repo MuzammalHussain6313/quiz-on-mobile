@@ -47,13 +47,14 @@ export class AttemptQuizPage implements OnInit {
     }
 
     ngOnInit() {
-        this.formInitializer();
         this.attemptQuiz = JSON.parse(localStorage.getItem('attemptQuiz'));
+        console.log(this.attemptQuiz);
+        this.formInitializer();
     }
 
     formInitializer() {
         this.quizForm = this.formBuilder.group({});
-        for (let i = 0; i < this.questions.length; i++) {
+        for (let i = 0; i < this.attemptQuiz.questions.length; i++) {
             const questionNo = 'q' + (i + 1) + '';
             this.quizForm.addControl(questionNo, this.formBuilder.control('', Validators.required));
         }

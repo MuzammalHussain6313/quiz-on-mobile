@@ -33,7 +33,7 @@
                 <div *ngIf="!upComingQuizzes.length">
                     <h1 style="text-align: center; padding: 30px">No Quiz</h1>
                 </div>
-                <ion-card style="border-radius: 10px" (click)="attemptQuiz()"  *ngFor="let item of upComingQuizzes">
+                <ion-card style="border-radius: 10px" (click)="attemptQuiz(item)"  *ngFor="let item of upComingQuizzes">
                     <ion-item lines="none">
                         <ion-icon name="bookmark" color="primary"></ion-icon>
                         <ion-label style="padding-left: 5px">{{item?.title}}</ion-label>
