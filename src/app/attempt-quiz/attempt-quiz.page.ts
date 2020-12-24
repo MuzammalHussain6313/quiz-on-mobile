@@ -10,36 +10,37 @@ export class AttemptQuizPage implements OnInit {
 
     questions = [
         {
-        type: 'mcq',
-        question: 'When pakistan cam into being?',
-        correctAnswer: '1947',
-        options: ['1946', '1947', '1949', '1948']
-    }, {
-        type: 'fillInTheBlank',
-        part1: 'Pakistan become an atomic power in ',
-        correctAnswer: '1998',
-        part2: null
-    }, {
-        type: 'short',
-        question: 'When pakistan cam into being?',
-        correctAnswer: '1947',
-    }, {
-        type: 'trueFalse',
-        question: 'Pakistan cam into being in 1987',
-        correctAnswer: 'false',
-    }, {
-        type: 'fillInTheBlank',
-        part1: 'OOPS stand for Object Oriented',
-        correctAnswer: 'Programming',
-        part2: 'System'
-      }, {
-        type: 'fillInTheBlank',
-        part1: null,
-        correctAnswer: 'Typescript',
-        part2: 'is supper set of javascript'
-      },
+            type: 'mcq',
+            question: 'When pakistan cam into being?',
+            correctAnswer: '1947',
+            options: ['1946', '1947', '1949', '1948']
+        }, {
+            type: 'fillInTheBlank',
+            part1: 'Pakistan become an atomic power in ',
+            correctAnswer: '1998',
+            part2: null
+        }, {
+            type: 'short',
+            question: 'When pakistan cam into being?',
+            correctAnswer: '1947',
+        }, {
+            type: 'trueFalse',
+            question: 'Pakistan cam into being in 1987',
+            correctAnswer: 'false',
+        }, {
+            type: 'fillInTheBlank',
+            part1: 'OOPS stand for Object Oriented',
+            correctAnswer: 'Programming',
+            part2: 'System'
+        }, {
+            type: 'fillInTheBlank',
+            part1: null,
+            correctAnswer: 'Typescript',
+            part2: 'is supper set of javascript'
+        },
     ];
 
+    attemptQuiz: any;
     quizForm: FormGroup;
 
     constructor(private formBuilder: FormBuilder) {
@@ -47,6 +48,7 @@ export class AttemptQuizPage implements OnInit {
 
     ngOnInit() {
         this.formInitializer();
+        this.attemptQuiz = JSON.parse(localStorage.getItem('attemptQuiz'));
     }
 
     formInitializer() {
