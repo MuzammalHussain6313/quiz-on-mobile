@@ -25,6 +25,8 @@ export class AppComponent {
   initializeApp() {
     this.platform.ready().then(() => {
       this.statusBar.styleDefault();
+      this.statusBar.backgroundColorByHexString('#fafafa');
+      this.statusBar.styleDefault();
       this.splashScreen.hide();
     });
   }

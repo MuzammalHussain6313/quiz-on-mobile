@@ -3,6 +3,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import * as firebase from 'firebase';
 import {UtilsService} from '../services/utils.service';
 import {NavController} from '@ionic/angular';
+import {UserService} from '../services/user.service';
 
 @Component({
     selector: 'app-add-course',
@@ -10,15 +11,19 @@ import {NavController} from '@ionic/angular';
     styleUrls: ['./add-course.page.scss'],
 })
 export class AddCoursePage implements OnInit {
+
     courseForm: FormGroup;
+    user: any;
 
     constructor(private formBuilder: FormBuilder,
                 private navCtrl: NavController,
+                private userService: UserService,
                 private utils: UtilsService) {
     }
 
     ngOnInit() {
         this.formInitializer();
+        this.user = this.userService.getUser();
     }
 
     formInitializer() {
@@ -40,6 +45,7 @@ export class AddCoursePage implements OnInit {
         course.joingCode = randomstring;
         firebase.database().ref(`courses/${key}`).set(course).then(res => {
             this.utils.stopLoading();
+            this.assignCourseInDatabase(key);
             this.utils.presentAlert(`Course successfully created. ${randomstring} is courses code to join the course. please share this course code with students`);
             console.log('data inserted res:', res);
             this.navCtrl.back();
@@ -47,5 +53,13 @@ export class AddCoursePage implements OnInit {
             this.utils.stopLoading();
             console.log(err);
         });
+    }
+
+    assignCourseInDatabase(key) {
+        const dbKey = firebase.database().ref('teacher_course').push().key;
+        firebase.database().ref(`teacher_course/${dbKey}`).set({
+            courseKey: key,
+            teacherId: this.user.uid
+        }).then(res => console.log(res)).catch(err => console.log('Error: ', err));
     }
 }

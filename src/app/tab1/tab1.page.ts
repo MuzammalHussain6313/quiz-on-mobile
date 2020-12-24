@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AlertController, NavController} from '@ionic/angular';
 import {DataCollectorService} from '../services/data-collector.service';
 import {UtilsService} from '../services/utils.service';
@@ -10,28 +10,39 @@ import {UserService} from '../services/user.service';
     templateUrl: 'tab1.page.html',
     styleUrls: ['tab1.page.scss']
 })
-export class Tab1Page {
+export class Tab1Page implements OnInit {
 
-    courses: any = [];
+    allCourses: any;
+    courses: any;
     user: any = {};
     courseName = 'Data Mining';
 
     constructor(private alertController: AlertController,
-                private dataColloector: DataCollectorService,
+                private dataCollector: DataCollectorService,
                 private utils: UtilsService,
                 private service: UserService,
                 private navCtrl: NavController) {
-        // this.user.isTeacher = true;
         this.user = service.getUser();
-        this.getAllCourses();
+        setTimeout(() => {
+            if (this.user.isStudent) {
+                this.courses = this.dataCollector.getCoursesByStudentId(this.user.uid);
+                console.log('courses', this.courses);
+            } else {
+                this.courses = this.dataCollector.getCoursesByTeacherId(this.user.uid);
+            }
+        }, 5000);
+    }
+
+    ngOnInit() {
+
     }
 
     getAllCourses() {
         firebase.database().ref('courses').once('value', snapshot => {
-            this.courses = [];
+            this.allCourses = [];
             snapshot.forEach((node) => {
                 const course = node.val();
-                this.courses.push(course);
+                this.allCourses.push(course);
             });
             console.log(this.courses);
         });
@@ -69,7 +80,7 @@ export class Tab1Page {
     }
 
     joinCourseInDatabase(code) {
-        const course = this.courses.filter((c) => c.courseCode === code);
+        const course = this.allCourses.filter((c) => c.courseCode === code);
         if (course.length) {
             const key = firebase.database().ref('student_course').push().key;
             firebase.database().ref(`student_course/${key}`).set({

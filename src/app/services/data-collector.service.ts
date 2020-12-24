@@ -9,12 +9,18 @@ export class DataCollectorService {
     courses: any = [];
     students: any = [];
     teachers: any = [];
+    quizzes: any;
     quizBanks = [];
+    studentCourses: any = [];
+    teacherCourses: any = [];
 
     constructor() {
+        this.getStudentCurse();
+        this.getTeacherCurse();
         this.getAllCourses();
         this.getAllUsers();
         this.getAllQuizBanks();
+        this.getAllQuizzes();
     }
 
     getAllUsers() {
@@ -55,5 +61,71 @@ export class DataCollectorService {
         }).catch(err => {
             console.log(err);
         });
+    }
+
+    getStudentCurse() {
+        firebase.database().ref('student_course').once('value', snapshot => {
+            this.studentCourses = [];
+            snapshot.forEach((node) => {
+                const sc = node.val();
+                sc.key = node.val().key;
+                this.studentCourses.push(sc);
+            });
+        }).then(res => {
+        }).catch(err => {
+            console.log(err);
+        });
+    }
+
+    getTeacherCurse() {
+        firebase.database().ref('teacher_course').once('value', snapshot => {
+            this.teacherCourses = [];
+            snapshot.forEach((node) => {
+                const tc = node.val();
+                tc.key = node.val().key;
+                this.teacherCourses.push(tc);
+            });
+        }).then(res => {
+        }).catch(err => console.log(err));
+    }
+
+    getCoursesByStudentId(studentId) {
+        const cources: any = [];
+        this.studentCourses.filter(sc => {
+            if (sc.studentId === studentId) {
+                const course = this.courses.find(c => c.key === sc.courseKey);
+                cources.push(course);
+            }
+        });
+        return cources;
+    }
+
+    getCoursesByTeacherId(teacherId) {
+        const cources: any = [];
+        this.teacherCourses.filter(sc => {
+            if (sc.teacherId === teacherId) {
+                const course = this.courses.find(c => c.key === sc.courseKey);
+                cources.push(course);
+            }
+        });
+        return cources;
+    }
+
+    getAllQuizzes() {
+        firebase.database().ref('quizzes').once('value', snapshot => {
+            this.quizzes = [];
+            snapshot.forEach((node) => {
+                const q = node.val();
+                q.key = node.val().key;
+                this.quizzes.push(q);
+            });
+        }).then(res => {
+        }).catch(err => {
+            console.log(err);
+        });
+    }
+
+    filterQuizzesByCourseId(key) {
+        return this.quizzes.filter(q => q.courseKey === key);
     }
 }

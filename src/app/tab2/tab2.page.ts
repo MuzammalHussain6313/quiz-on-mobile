@@ -25,16 +25,12 @@ export class Tab2Page implements OnInit {
     }
 
     ngOnInit() {
-        debugger
-        this.students = this.dataCollector.students;
-        this.filteredStudents = this.dataCollector.students;
-        this.teachers = this.dataCollector.teachers;
-        this.filteredTeachers = this.dataCollector.teachers;
     }
 
-    ionViewDidLoad() {
+    ionViewDidEnter() {
         this.students = this.dataCollector.students;
         this.filteredStudents = this.dataCollector.students;
+        debugger
         this.teachers = this.dataCollector.teachers;
         this.filteredTeachers = this.dataCollector.teachers;
     }

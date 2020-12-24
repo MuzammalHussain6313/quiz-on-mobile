@@ -42,7 +42,7 @@
         <ion-item lines="none" class="itemCont">
           <ion-input placeholder="Phone Number" formControlName="phone" type="number"></ion-input>
         </ion-item>
-        <ion-button class="itemCont" [disabled]="signupForm.invalid" (click)="signUpUser()"
+        <ion-button class="itemCont" [disabled]="!signupForm.valid" (click)="signUpUser()"
                     color="primary" type="submit" expand="block">SIGN UP</ion-button>
         <div style="text-align: center; padding-top: 45px">
           <ion-label color="secondary">Already have an account?

@@ -20,7 +20,7 @@ export class SignupPage implements OnInit {
     passwordType = 'password';
     passwordIcon = 'eye-off';
     loading: any;
-    roles = [`Teacher`, 'Student'];
+    roles = ['Teacher', 'Student'];
     isStudent = false;
     isTeacher = false;
 
@@ -45,11 +45,12 @@ export class SignupPage implements OnInit {
             confirm_password: ['', [
                 Validators.required, Validators.minLength(6),
                 this.mismatchedPasswords('password')]],
-            phone: ['+92', [Validators.required, Validators.minLength(10), Validators.maxLength(10)]]
+            phone: ['+92', [Validators.required, Validators.maxLength(14)]]
         });
     }
 
     async signUpUser() {
+        debugger
         this.loading = await this.loadingCtrl.create({
             message: 'please wait...'
         });
@@ -117,7 +118,7 @@ export class SignupPage implements OnInit {
         if (role === 'Teacher') {
             this.isTeacher = true;
             this.isStudent = false;
-            this.signupForm.controls.regNo.setValue('');
+            this.signupForm.controls.regNo.setValue('no Reg No.');
         } else {
             this.isTeacher = false;
             this.isStudent = true;
