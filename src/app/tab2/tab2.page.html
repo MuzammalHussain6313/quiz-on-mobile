@@ -34,7 +34,7 @@
                             <img class="userImg" [src]="'assets/image.png'"/>
                         </div>
                         <ion-label style="padding-left: 15px">{{item?.fullName}}</ion-label>
-                        <ion-icon (click)="moreOptions()" color="primary" size="large" slot="end"
+                        <ion-icon (click)="moreOptions(item)" color="primary" size="large" slot="end"
                                   name="ellipsis-vertical"></ion-icon>
                     </ion-item>
                 </ion-card>
@@ -50,7 +50,7 @@
                             <img class="userImg" [src]="'assets/image.png'"/>
                         </div>
                         <ion-label style="padding-left: 15px">{{item?.fullName}}</ion-label>
-                        <ion-icon (click)="moreOptions()" color="primary" size="large" slot="end"
+                        <ion-icon (click)="moreOptions(item)" color="primary" size="large" slot="end"
                                   name="ellipsis-vertical"></ion-icon>
                     </ion-item>
                 </ion-card>

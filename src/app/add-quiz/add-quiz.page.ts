@@ -75,7 +75,7 @@ export class AddQuizPage implements OnInit {
             marks: [null, [Validators.required]],
             part1: [null, [Validators.required]],
             part2: [null, [Validators.required]],
-            blank: [null, [Validators.required]]
+            answer: [null, [Validators.required]]
         });
     }
 

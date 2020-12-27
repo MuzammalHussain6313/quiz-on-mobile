@@ -77,8 +77,8 @@ export class LoginPage implements OnInit {
             console.log('is Admin: ', isAdmin);
             if (isAdmin) {
                 this.navCtrl.navigateRoot(['tabs/tab2']);
-            } else {
-                this.navCtrl.navigateRoot(['/tabs']);
+            } else if (!isAdmin) {
+                this.navCtrl.navigateRoot(['tabs/tab1']);
             }
         });
     }

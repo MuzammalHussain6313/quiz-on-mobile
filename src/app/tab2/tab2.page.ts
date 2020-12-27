@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ActionSheetController, NavController} from '@ionic/angular';
 import {DataCollectorService} from '../services/data-collector.service';
-import {filter} from 'rxjs/operators';
+import * as firebase from 'firebase';
 
 @Component({
     selector: 'app-tab2',
@@ -30,10 +30,10 @@ export class Tab2Page implements OnInit {
     ionViewDidEnter() {
         this.students = this.dataCollector.students;
         this.filteredStudents = this.dataCollector.students;
-        debugger
         this.teachers = this.dataCollector.teachers;
         this.filteredTeachers = this.dataCollector.teachers;
     }
+
     segmentChanged($event: CustomEvent) {
         this.student = !this.student;
         this.faculty = !this.faculty;
@@ -43,7 +43,7 @@ export class Tab2Page implements OnInit {
         return myArray.filter((element) => element.email.includes(nameKey));
     }
 
-    async moreOptions() {
+    async moreOptions(user) {
         const alert = await this.actionCtrl.create({
             header: 'More Options !!!',
             cssClass: 'my-custom-class',
@@ -61,7 +61,7 @@ export class Tab2Page implements OnInit {
                     icon: 'trash',
                     cssClass: 'danger',
                     handler: () => {
-                        // this.navCtrl.navigateForward(['/add-quiz']);
+                        this.deleteUser(user);
                     }
                 },
                 {
@@ -77,6 +77,19 @@ export class Tab2Page implements OnInit {
         await alert.present();
     }
 
+    deleteUser(user) {
+        firebase.auth().signInWithEmailAndPassword(user.email, user.password)
+            .then((info) => {
+                const fuser: any = firebase.auth().currentUser;
+                fuser.delete();
+                this.deleteFromDatabase(user);
+            });
+    }
+
+    deleteFromDatabase(user) {
+        firebase.database().ref('/users').child(user).remove()
+            .then(res => console.log(res)).catch(err => console.log(err));
+    }
     searchStudents() {
         if (this.studentSearch) {
             this.filteredStudents = this.search(this.studentSearch, this.students);

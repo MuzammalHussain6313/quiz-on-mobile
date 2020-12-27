@@ -15,7 +15,6 @@ export class Tab1Page implements OnInit {
     allCourses: any;
     courses: any;
     user: any = {};
-    courseName = 'Data Mining';
 
     constructor(private alertController: AlertController,
                 private dataCollector: DataCollectorService,
@@ -24,6 +23,7 @@ export class Tab1Page implements OnInit {
                 private navCtrl: NavController) {
         this.user = service.getUser();
         setTimeout(() => {
+            this.allCourses = dataCollector.courses;
             if (this.user.isStudent) {
                 this.courses = this.dataCollector.getCoursesByStudentId(this.user.uid);
                 console.log('courses', this.courses);
@@ -35,17 +35,6 @@ export class Tab1Page implements OnInit {
 
     ngOnInit() {
 
-    }
-
-    getAllCourses() {
-        firebase.database().ref('courses').once('value', snapshot => {
-            this.allCourses = [];
-            snapshot.forEach((node) => {
-                const course = node.val();
-                this.allCourses.push(course);
-            });
-            console.log(this.courses);
-        });
     }
 
     async joinClass() {
@@ -80,17 +69,16 @@ export class Tab1Page implements OnInit {
     }
 
     joinCourseInDatabase(code) {
-        const course = this.allCourses.filter((c) => c.courseCode === code);
-        if (course.length) {
+        const courses = this.allCourses.filter((c) => c.courseCode === code);
+        if (courses.length) {
             const key = firebase.database().ref('student_course').push().key;
             firebase.database().ref(`student_course/${key}`).set({
-                courseKey: course[0].key,
-                courseCode: course[0].courseCode,
+                courseKey: courses[0].key,
+                courseCode: courses[0].courseCode,
                 studentId: this.user.uid
-            });
+            }).then(res => this.courses.push(courses[0]));
         } else {
             this.utils.presentToast('Enter Correct course code...');
-            this.joinClass();
         }
     }
 

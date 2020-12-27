@@ -87,6 +87,7 @@ export class SignupPage implements OnInit {
             email: mail,
             username: formData.user_name,
             uid: uId,
+            password: formData.password,
             isAdmin: false,
             isStudent: this.isStudent,
             isTeacher: this.isTeacher,

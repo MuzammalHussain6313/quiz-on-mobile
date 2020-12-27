@@ -30,14 +30,21 @@ export class CourseDetailPage implements OnInit {
         this.course = JSON.parse(localStorage.getItem('course'));
         this.quizzes = this.dataCollector.filterQuizzesByCourseId(this.course.key);
         if (this.quizzes) {
-            const currentDte = new Date();
             this.quizzes.forEach(quiz => {
-                if (quiz.date.split('T')[0] < currentDte.toISOString().split('T')[0]) {
+                const currentDte = new Date();
+                // console.log(currentDte);
+                const quizDate = new Date(quiz.date);
+                // console.log(quizDate);
+                if (quizDate < currentDte || this.checkTime(quiz.time)) {
                     this.olQuizzes.push(quiz);
                 }
             });
             this.quizzes.forEach(quiz => {
-                if (quiz.date.split('T')[0] > currentDte.toISOString().split('T')[0]) {
+                const currentDte = new Date();
+                // console.log(currentDte);
+                const quizDate = new Date(quiz.date);
+                // console.log(quizDate);
+                if (quizDate > currentDte || quizDate.toDateString() === currentDte.toDateString()) {
                     this.upComingQuizzes.push(quiz);
                 }
             });
@@ -91,14 +98,30 @@ export class CourseDetailPage implements OnInit {
     }
 
     attemptQuiz(quiz) {
-
         const varDate = new Date(quiz.date);
         const today = new Date();
-        if (varDate === today || varDate <= today) {
-          localStorage.setItem('attemptQuiz', JSON.stringify(quiz));
-          this.navCtrl.navigateForward(['/attempt-quiz']);
-        } else {
-          this.utils.presentAlert('Please wait until quiz time start. Thanks');
+        // if (varDate.toDateString() === today.toDateString() && this.checkTime(quiz.time)) {
+        localStorage.setItem('attemptQuiz', JSON.stringify(quiz));
+        this.navCtrl.navigateForward(['/attempt-quiz']);
+        // } else {
+        //     this.utils.presentAlert('Please wait until quiz time start. Thanks');
+        // }
+    }
+
+    checkTime(date) {
+        const qd = new Date(date); // quiz time
+        const qhours = qd.getHours();
+        const qmins = qd.getMinutes();
+        const qday = qd.getDay();
+        const d = new Date(); // current time
+        const hours = d.getHours();
+        const mins = d.getMinutes();
+        const day = d.getDay();
+        if (hours === qhours && (mins >= qmins && mins <= qmins + 10)) {
+            return true;
+        } else if (hours === qhours && !(mins >= qmins && mins <= qmins + 10)) {
+            // if quiz time passed.
+            return false;
         }
     }
 }

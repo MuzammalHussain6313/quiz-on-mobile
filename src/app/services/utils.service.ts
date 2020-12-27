@@ -43,6 +43,7 @@ export class UtilsService {
             message: msg,
             duration: 3000
         });
+        this.toast.present();
     }
 
     stopLoading() {

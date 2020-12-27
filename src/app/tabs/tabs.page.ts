@@ -13,6 +13,7 @@ export class TabsPage {
 
     constructor(private service: UserService) {
         this.user = service.getUser();
+        console.log(this.user);
     }
 
 }
