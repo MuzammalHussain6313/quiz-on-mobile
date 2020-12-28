@@ -3,20 +3,23 @@ import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/form
 import {Subscription} from 'rxjs';
 import * as firebase from 'firebase';
 import {LoadingController, NavController} from '@ionic/angular';
+import {UtilsService} from '../services/utils.service';
 
 @Component({
-    selector: 'app-signup',
-    templateUrl: './signup.page.html',
-    styleUrls: ['./signup.page.scss'],
+    selector: 'app-add-user',
+    templateUrl: './add-user.page.html',
+    styleUrls: ['./add-user.page.scss'],
 })
-export class SignupPage implements OnInit {
+export class AddUserPage implements OnInit {
+
     constructor(private formBuilder: FormBuilder,
                 private navCtrl: NavController,
+                private utils: UtilsService,
                 private loadingCtrl: LoadingController,
     ) {
     }
 
-    signupForm: FormGroup;
+    addUserForm: FormGroup;
     passwordType = 'password';
     passwordIcon = 'eye-off';
     loading: any;
@@ -35,7 +38,7 @@ export class SignupPage implements OnInit {
 
     formInitializer() {
         const EMAILPATTERN = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/;
-        this.signupForm = this.formBuilder.group({
+        this.addUserForm = this.formBuilder.group({
             fullName: [null, [Validators.required, Validators.minLength(3), Validators.maxLength(20)]],
             email: [null, [Validators.required, Validators.pattern(EMAILPATTERN)]],
             user_name: [null, [Validators.required]],
@@ -49,21 +52,17 @@ export class SignupPage implements OnInit {
         });
     }
 
-    async signUpUser() {
-        debugger
+    async addUser() {
         this.loading = await this.loadingCtrl.create({
             message: 'please wait...'
         });
         this.loading.present();
-        const formData = this.signupForm.value;
+        const formData = this.addUserForm.value;
         firebase.auth().createUserWithEmailAndPassword(formData.email, formData.password).then(res => {
             this.saveUserInRealTime(res.user.uid, res.user.email);
             const auth = firebase.auth().currentUser;
-            auth.sendEmailVerification().then(() => {
-                alert('We send you a verification email. Please check your email and verify!');
-            });
             console.log(res);
-            this.navCtrl.navigateRoot(['']);
+            this.navCtrl.back();
             if (this.loading) {
                 this.loading.dismiss();
             }
@@ -80,7 +79,7 @@ export class SignupPage implements OnInit {
             message: 'please wait...'
         });
         this.loading.present();
-        const formData = this.signupForm.value;
+        const formData = this.addUserForm.value;
         this.decideRole(formData.role);
         firebase.database().ref(`users/${uId}`).set({
             fullName: formData.fullName,
@@ -91,9 +90,9 @@ export class SignupPage implements OnInit {
             isAdmin: false,
             isStudent: this.isStudent,
             isTeacher: this.isTeacher,
-            isActive: true,
+            enable: true,
             phone: '0' + formData.phone,
-        });
+        }).then(res => this.utils.presentToast('User have been created successfully...'));
         if (this.loading) {
             this.loading.dismiss();
         }
@@ -120,11 +119,11 @@ export class SignupPage implements OnInit {
         if (role === 'Teacher') {
             this.isTeacher = true;
             this.isStudent = false;
-            this.signupForm.controls.regNo.setValue('no Reg No.');
+            this.addUserForm.controls.regNo.setValue('no Reg No.');
         } else {
             this.isTeacher = false;
             this.isStudent = true;
-            this.signupForm.controls.regNo.setValue('');
+            this.addUserForm.controls.regNo.setValue('');
         }
     }
 
@@ -132,4 +131,5 @@ export class SignupPage implements OnInit {
         console.log(role.detail.value);
         this.decideRole(role.detail.value);
     }
+
 }

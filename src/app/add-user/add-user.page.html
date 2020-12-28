@@ -2,17 +2,17 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button text=""></ion-back-button>
+      <ion-back-button mode="ios" text=""></ion-back-button>
     </ion-buttons>
-    <ion-title>Sign Up</ion-title>
+    <ion-title>Register</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <form [formGroup]="signupForm">
+  <form [formGroup]="addUserForm">
     <ion-row class="ion-justify-content-center">
       <ion-col size="11">
-        <h3 style="text-align: center">Create your account!</h3>
+        <h3 style="text-align: center">Add New App User!</h3>
         <ion-item lines="none" class="itemCont">
           <ion-input name="fullName" formControlName="fullName" type="text" placeholder="Full Name"></ion-input>
         </ion-item>
@@ -42,12 +42,8 @@
         <ion-item lines="none" class="itemCont">
           <ion-input placeholder="Phone Number" formControlName="phone" type="number"></ion-input>
         </ion-item>
-        <ion-button class="itemCont" [disabled]="!signupForm.valid" (click)="signUpUser()"
-                    color="primary" type="submit" expand="block">SIGN UP</ion-button>
-        <div style="text-align: center; padding-top: 45px">
-          <ion-label color="secondary">Already have an account?
-            <span routerLink="/" style="color: #ab1a3e"><b> <u>Sign In</u></b></span></ion-label>
-        </div>
+        <ion-button class="itemCont" [disabled]="!addUserForm.valid" (click)="addUser()"
+                    color="primary" type="submit" expand="block">Add</ion-button>
       </ion-col>
     </ion-row>
   </form>
