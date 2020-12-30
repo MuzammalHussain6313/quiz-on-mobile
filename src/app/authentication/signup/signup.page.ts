@@ -3,6 +3,7 @@ import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/form
 import {Subscription} from 'rxjs';
 import * as firebase from 'firebase';
 import {LoadingController, NavController} from '@ionic/angular';
+import {UtilsService} from '../../services/utils.service';
 
 @Component({
     selector: 'app-signup',
@@ -12,6 +13,7 @@ import {LoadingController, NavController} from '@ionic/angular';
 export class SignupPage implements OnInit {
     constructor(private formBuilder: FormBuilder,
                 private navCtrl: NavController,
+                private utils: UtilsService,
                 private loadingCtrl: LoadingController,
     ) {
     }
@@ -49,8 +51,19 @@ export class SignupPage implements OnInit {
         });
     }
 
-    async signUpUser() {
-        debugger
+    signUpUser() {
+        const pattern = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        const email = this.signupForm.value.email;
+        if (pattern.test(email) &&
+            (email.indexOf('uol.edu.pk', email.length - 'uol.edu.pk'.length) !== -1)) {
+            console.log('VALID');
+            this.createUserInDb();
+        } else {
+            this.utils.presentAlert('Only emails with \"uol.edu.pk\" domain are acceptable. Please enter valid email');
+        }
+    }
+
+    async createUserInDb() {
         this.loading = await this.loadingCtrl.create({
             message: 'please wait...'
         });

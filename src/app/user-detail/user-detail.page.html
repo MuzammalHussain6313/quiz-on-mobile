@@ -37,8 +37,8 @@
             </ion-item>
             <ion-item detail="false" lines="none" class="itemCont">
                 <ion-icon slot="start" class="itemIcon" name="flash-off"></ion-icon>
-                <ion-label *ngIf="!user.isActive">Unblocked</ion-label>
-                <ion-label *ngIf="user.isActive">Blocked</ion-label>
+                <ion-label *ngIf="!user.isActive">Blocked</ion-label>
+                <ion-label *ngIf="user.isActive">Unblocked</ion-label>
                 <ion-toggle slot="end" (ionChange)="changeValue()"></ion-toggle>
             </ion-item>
         </ion-col>
