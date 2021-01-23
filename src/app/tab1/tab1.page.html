@@ -7,6 +7,9 @@
 </ion-header>
 
 <ion-content>
+    <ion-refresher slot="fixed" (ionRefresh)="loadDataAgain($event)">
+        <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
     <ion-row class="ion-justify-content-center">
         <ion-col *ngIf="courses" size="11" class="py-0">
             <ion-card style="text-transform: capitalize;" (click)="goToDetail(iteration)"

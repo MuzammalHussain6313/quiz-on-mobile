@@ -53,19 +53,26 @@ export class AttemptQuizPage implements OnInit {
         this.markedQuiz.courseKey = this.attemptQuiz.courseKey;
         this.markedQuiz.totalMarks = this.attemptQuiz.totalMarks;
         this.markedQuiz.timestamp = Date.now();
+        this.markedQuiz.quizKey = this.attemptQuiz.key;
+        this.markedQuiz.title = this.attemptQuiz.title;
         this.markedQuiz.studentId = JSON.parse(localStorage.getItem('user')).uid;
         this.attemptQuiz.questions.forEach((question, index) => {
             const answers = this.quizForm.value;
             const qNo = `q${index + 1}`;
-            const marks = this.markQuestion(question, answers[qNo], index);
-            this.marksAchieved = this.marksAchieved + marks;
-            question.answerMarks = marks;
-            this.markedQuiz.solvedQuestions.push(question);
+            const solvedQuestion = this.markQuestion(question, answers[qNo], index);
+            // this.marksAchieved = this.marksAchieved + marks;
+            // if (question.marks === this.marksAchieved) {
+            //     question.isCorrect = true;
+            // } else {
+            //     question.isCorrect = false;
+            // }
+            // question.answerMarks = marks;
+            // question.selectedAnswer = answers[qNo];
+            this.markedQuiz.solvedQuestions.push(solvedQuestion);
         });
         const key = firebase.database().ref('/attemptQuizzes').push().key;
         this.markedQuiz.key = key;
         this.markedQuiz.achievedMarks = this.marksAchieved;
-        debugger
         firebase.database().ref(`/attemptQuizzes/${key}`).set(this.markedQuiz)
             .then(res => {
                 console.log(res);
@@ -78,15 +85,27 @@ export class AttemptQuizPage implements OnInit {
         const decimal: any = stringSimilarity(question.answer.toString(), answer.toString()).toFixed(2);
         const answerMatchingPercentage = decimal * 100;
         if (question.type === 'mcqs' || question.type === 'trueFalse'
-            || question.type === 'fillInBlanks' && answerMatchingPercentage === 95) {
-            return question.marks;
+            || question.type === 'fillInBlanks' && answerMatchingPercentage > 90) {
+            // return question.marks;
+            return this.setQuestionData(question, question.marks, answer, true);
         } else if (question.type === 'shortQuestions' && answerMatchingPercentage >= 60) {
-            return question.marks;
+            // return question.marks;
+            return this.setQuestionData(question, question.marks, answer, true);
         } else if (question.marks >= 1 && (answerMatchingPercentage >= 40 && answerMatchingPercentage < 60)) {
-            return question.marks / 2;
+            // return question.marks / 2;
+            return this.setQuestionData(question, (question.marks / 2), answer, false);
         } else {
-            return 0;
+            // return 0;
+            return this.setQuestionData(question, 0, answer, false);
         }
+    }
+
+    setQuestionData(question, marks, answer, result) {
+        this.marksAchieved = this.marksAchieved + marks;
+        question.isCorrect = result;
+        question.answerMarks = marks;
+        question.selectedAnswer = answer;
+        return question;
     }
 
 }

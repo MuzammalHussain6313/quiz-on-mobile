@@ -37,6 +37,18 @@ export class Tab1Page implements OnInit {
 
     }
 
+    loadDataAgain(event) {
+        this.allCourses = this.dataCollector.courses;
+        if (this.user.isStudent) {
+            this.courses = this.dataCollector.getCoursesByStudentId(this.user.uid);
+            console.log('courses', this.courses);
+        } else {
+            this.courses = this.dataCollector.getCoursesByTeacherId(this.user.uid);
+        }
+        setTimeout(() => {
+            event.target.complete();
+        }, 3000);
+    }
     async joinClass() {
         const alert = await this.alertController.create({
             cssClass: 'my-custom-class',

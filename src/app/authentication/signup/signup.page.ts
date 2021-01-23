@@ -14,7 +14,7 @@ export class SignupPage implements OnInit {
     constructor(private formBuilder: FormBuilder,
                 private navCtrl: NavController,
                 private utils: UtilsService,
-                private loadingCtrl: LoadingController,
+                private loadingCtrl: LoadingController
     ) {
     }
 

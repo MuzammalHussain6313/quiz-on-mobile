@@ -11,8 +11,10 @@ export class DataCollectorService {
     teachers: any = [];
     quizzes: any;
     quizBanks = [];
+    attemptQuizez: any = [];
     studentCourses: any = [];
     teacherCourses: any = [];
+    myAttemptQuizez: any = [];
 
     constructor() {
         this.getStudentCurse();
@@ -21,6 +23,7 @@ export class DataCollectorService {
         this.getAllUsers();
         this.getAllQuizBanks();
         this.getAllQuizzes();
+        this.getAllAttemptedQuizez();
     }
 
     getAllUsers() {
@@ -127,5 +130,24 @@ export class DataCollectorService {
 
     filterQuizzesByCourseId(key) {
         return this.quizzes.filter(q => q.courseKey === key);
+    }
+
+    getAllAttemptedQuizez() {
+        firebase.database().ref('attemptQuizzes').once('value', snapshot => {
+            this.attemptQuizez = [];
+            const user: any = JSON.parse(localStorage.getItem('user'));
+            snapshot.forEach((node) => {
+                const q = node.val();
+                q.key = node.val().key;
+                this.attemptQuizez.push(q);
+                if (q.studentId === user.uid) {
+                    this.myAttemptQuizez.push(q);
+                }
+                console.log('---------------', this.myAttemptQuizez);
+            });
+        }).then(res => {
+        }).catch(err => {
+            console.log(err);
+        });
     }
 }

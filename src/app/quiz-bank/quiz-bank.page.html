@@ -171,12 +171,16 @@
                     <p>Ans: {{question?.answer}}</p>
                 </div>
                 <div *ngIf="question?.type === 'mcqs'">
-                    <ion-label>Q: {{question?.question}}</ion-label>
-                    <p>Options: A. {{question?.options[0]}} B. {{question?.options[1]}}
-                      C. {{question?.options[2]}} D. {{question?.options[3]}}</p>
+                  <ion-label>Q: {{question?.question}}</ion-label>
+                  <p>OptionsA: {{question?.optionA}}</p>
+                  <p>Option B: {{question?.optionB}}</p>
+                  <p>Option C: {{question?.optionC}}</p>
+                  <p>Option D: {{question?.optionD}}</p>
+                  <p>Correct option: {{question?.answer}}</p>
                 </div>
                 <div *ngIf="question?.type === 'fillInBlanks'">
                     <ion-label>Q {{i + 1}}: {{question?.part1 ? question.part1 : ''}} _________ {{question?.part2 ? question.part2 : ''}}?</ion-label>
+                  <p>Answer: {{question?.answer}}</p>
                 </div>
                 <div *ngIf="question?.type === 'trueFalse'">
                     <ion-label>Q: {{question?.question}}</ion-label>

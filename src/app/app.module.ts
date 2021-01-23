@@ -10,6 +10,7 @@ import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import { EmailComposer } from '@ionic-native/email-composer/ngx';
 import * as firebase from 'firebase';
+import { HttpClientModule} from '@angular/common/http';
 
 const firebaseConfig = {
     apiKey: 'AIzaSyBop6vDS-Vyjujl71qcPYLui2ZxyrHDppc',
@@ -25,7 +26,9 @@ firebase.initializeApp(firebaseConfig);
 @NgModule({
     declarations: [AppComponent],
     entryComponents: [],
-    imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule],
+    imports: [BrowserModule,
+        HttpClientModule,
+        IonicModule.forRoot(), AppRoutingModule],
     providers: [
         StatusBar,
         SplashScreen,
