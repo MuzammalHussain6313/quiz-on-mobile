@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import {ActionSheetController, NavController} from '@ionic/angular';
 import {DataCollectorService} from '../../services/data-collector.service';
 import {UtilsService} from '../../services/utils.service';
@@ -15,7 +15,7 @@ export class CourseDetailPage implements OnInit {
     upComingQuizzes: any = [];
     const;
     quizzes: any = [];
-
+    user: any;
     constructor(private navCtrl: NavController,
                 private dataCollector: DataCollectorService,
                 private utils: UtilsService,
@@ -24,6 +24,7 @@ export class CourseDetailPage implements OnInit {
 
     ngOnInit() {
         this.devidQuizzes();
+        this.user = JSON.parse(localStorage.getItem('user'));
     }
 
     devidQuizzes() {
@@ -51,16 +52,16 @@ export class CourseDetailPage implements OnInit {
         }
     }
 
-    async moreOptions() {
+    async teacherOptions() {
         const alert = await this.actionCtrl.create({
             cssClass: 'my-custom-class',
             buttons: [
                 {
-                    text: 'View Results',
-                    icon: 'bar-chart',
-                    cssClass: 'secondary',
+                    text: 'Download Report',
+                    icon: 'cloud-download',
+                    cssClass: 'primary',
                     handler: () => {
-                        this.navCtrl.navigateForward(['/result']);
+                        this.downloadReport();
                     }
                 },
                 {
@@ -123,5 +124,34 @@ export class CourseDetailPage implements OnInit {
             // if quiz time passed.
             return false;
         }
+    }
+
+    async studentOptions() {
+        const alert = await this.actionCtrl.create({
+            cssClass: 'my-custom-class',
+            buttons: [
+                {
+                    text: 'View Progress',
+                    icon: 'bar-chart',
+                    cssClass: 'primary',
+                    handler: () => {
+                        this.navCtrl.navigateForward(['/result']);
+                    }
+                },
+                {
+                    text: 'Help desk',
+                    icon: 'mail',
+                    cssClass: 'primary',
+                    handler: () => {
+                        this.utils.presentAlert('Help Desk not yet implemented');
+                    }
+                }
+            ]
+        });
+        await alert.present();
+    }
+
+    private downloadReport() {
+        window.location.href = 'https://qob.herokuapp.com/';
     }
 }

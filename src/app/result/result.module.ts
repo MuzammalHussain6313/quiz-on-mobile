@@ -5,7 +5,7 @@ import {FormsModule} from '@angular/forms';
 import {IonicModule} from '@ionic/angular';
 
 import {ResultPageRoutingModule} from './result-routing.module';
-
+import {ChartsModule} from 'ng2-charts';
 import {ResultPage} from './result.page';
 
 @NgModule({
@@ -13,6 +13,7 @@ import {ResultPage} from './result.page';
         CommonModule,
         FormsModule,
         IonicModule,
+        ChartsModule,
         ResultPageRoutingModule
     ],
     declarations: [ResultPage]

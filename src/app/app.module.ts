@@ -11,6 +11,7 @@ import {AppComponent} from './app.component';
 import { EmailComposer } from '@ionic-native/email-composer/ngx';
 import * as firebase from 'firebase';
 import { HttpClientModule} from '@angular/common/http';
+import {ChartsModule} from 'ng2-charts';
 
 const firebaseConfig = {
     apiKey: 'AIzaSyBop6vDS-Vyjujl71qcPYLui2ZxyrHDppc',
@@ -28,6 +29,7 @@ firebase.initializeApp(firebaseConfig);
     entryComponents: [],
     imports: [BrowserModule,
         HttpClientModule,
+        ChartsModule,
         IonicModule.forRoot(), AppRoutingModule],
     providers: [
         StatusBar,

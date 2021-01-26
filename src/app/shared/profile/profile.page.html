@@ -12,11 +12,11 @@
     <ion-col size="11">
       <ion-row class="mb-2">
         <ion-col size="4">
-          <img src="{{user?.profileImage || '/assets/image.png'}}" class="userImg">
+          <img src="{{'/assets/image.png'}}" class="userImg">
         </ion-col>
         <ion-col size="8" style="padding-left: 10px;" class="align-center">
-          <h3 class="my-0 primary">{{user?.fullName || 'Your Name'}}</h3>
-          <p class="pt-1 my-0 appTxt">{{user?.email || 'your.mail@gmail.com'}}</p>
+          <h3 class="my-0 primary">{{'Your Name'}}</h3>
+          <p class="pt-1 my-0 appTxt">{{'your.mail@gmail.com'}}</p>
         </ion-col>
       </ion-row>
       <ion-item routerLink="/tabs/tab2" detail="false" lines="none" class="itemCont">

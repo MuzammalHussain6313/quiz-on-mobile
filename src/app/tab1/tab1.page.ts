@@ -15,6 +15,7 @@ export class Tab1Page implements OnInit {
     allCourses: any;
     courses: any;
     user: any = {};
+    loading = true;
 
     constructor(private alertController: AlertController,
                 private dataCollector: DataCollectorService,
@@ -27,8 +28,10 @@ export class Tab1Page implements OnInit {
             if (this.user.isStudent) {
                 this.courses = this.dataCollector.getCoursesByStudentId(this.user.uid);
                 console.log('courses', this.courses);
+                this.checkCourses();
             } else {
                 this.courses = this.dataCollector.getCoursesByTeacherId(this.user.uid);
+                this.checkCourses();
             }
         }, 5000);
     }
@@ -37,6 +40,13 @@ export class Tab1Page implements OnInit {
 
     }
 
+    checkCourses() {
+        if (this.courses) {
+            this.loading = false;
+        } else {
+            this.loading = true;
+        }
+    }
     loadDataAgain(event) {
         this.allCourses = this.dataCollector.courses;
         if (this.user.isStudent) {
@@ -47,7 +57,12 @@ export class Tab1Page implements OnInit {
         }
         setTimeout(() => {
             event.target.complete();
-        }, 3000);
+            if (this.courses) {
+                this.loading = true;
+            } else {
+                this.loading = false;
+            }
+        }, 2000);
     }
     async joinClass() {
         const alert = await this.alertController.create({

@@ -6,10 +6,19 @@
     </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content *ngIf="!loading">
     <ion-refresher slot="fixed" (ionRefresh)="loadDataAgain($event)">
         <ion-refresher-content></ion-refresher-content>
     </ion-refresher>
+    <h3 style="color: lightgray; padding-left: 50px; padding-top: 70px;">Please "Pull to Refresh" the page</h3>
+    <h1 style="color: lightgray; padding-left: 45%;">OR</h1>
+    <h3 style="color: lightgray; padding-left: 50px;">check your internet connection</h3>
+</ion-content>
+
+<ion-content *ngIf="loading">
+<!--    <ion-refresher slot="fixed" (ionRefresh)="loadDataAgain($event)">-->
+<!--        <ion-refresher-content></ion-refresher-content>-->
+<!--    </ion-refresher>-->
     <ion-row class="ion-justify-content-center">
         <ion-col *ngIf="courses" size="11" class="py-0">
             <ion-card style="text-transform: capitalize;" (click)="goToDetail(iteration)"

@@ -4,7 +4,8 @@
             <ion-back-button text="" mode="ios"></ion-back-button>
         </ion-buttons>
         <ion-title>{{'Data Sciences'}}</ion-title>
-        <ion-icon (click)="moreOptions()" color="primary" slot="end" name="ellipsis-vertical" size="large"></ion-icon>
+        <ion-icon *ngIf="user?.isTeacher" (click)="teacherOptions()" color="primary" slot="end" name="ellipsis-vertical" size="large"></ion-icon>
+        <ion-icon *ngIf="user?.isStudent" (click)="studentOptions()" color="primary" slot="end" name="ellipsis-vertical" size="large"></ion-icon>
     </ion-toolbar>
 </ion-header>
 
