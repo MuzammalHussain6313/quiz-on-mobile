@@ -48,7 +48,7 @@ export class AttemptQuizPage implements OnInit {
     }
 
     submitQuiz() {
-        debugger
+        
         console.log(this.quizForm.value);
         this.markedQuiz.courseKey = this.attemptQuiz.courseKey;
         this.markedQuiz.totalMarks = this.attemptQuiz.totalMarks;

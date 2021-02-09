@@ -104,7 +104,7 @@ export class Tab2Page implements OnInit {
                     text: 'OK',
                     cssClass: 'primary',
                     handler: () => {
-                        debugger
+                        
                         firebase.auth().signInWithEmailAndPassword(user.email, user.password)
                             .then((info) => {
                                 const fuser: any = firebase.auth().currentUser;

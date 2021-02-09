@@ -19,8 +19,8 @@ export class ChannelsPage implements OnInit {
   loadChannels() {
     firebase.database().ref(`chat`).on('value', snapshot => {
       this.channels = [];
-      // tslint:disable-next-line:no-debugger
-      debugger;
+      // tslint:disable-next-line:no-
+      ;
       snapshot.forEach((node) => {
         this.channels.push(node.val());
         console.log(this.channels);

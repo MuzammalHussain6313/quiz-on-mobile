@@ -152,6 +152,6 @@ export class CourseDetailPage implements OnInit {
     }
 
     private downloadReport() {
-        window.location.href = 'https://qob.herokuapp.com/';
+        window.location.href = 'https://quizonmobile.herokuapp.com/';
     }
 }

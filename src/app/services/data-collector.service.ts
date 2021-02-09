@@ -15,6 +15,7 @@ export class DataCollectorService {
     studentCourses: any = [];
     teacherCourses: any = [];
     myAttemptQuizez: any = [];
+    studentsOfCourses: any = [];
 
     constructor() {
         this.getStudentCurse();
@@ -27,7 +28,7 @@ export class DataCollectorService {
     }
 
     getAllUsers() {
-        firebase.database().ref('users').once('value', snapshot => {
+        firebase.database().ref('users').on('value', snapshot => {
             this.students = [];
             this.teachers = [];
             snapshot.forEach((node) => {
@@ -42,7 +43,7 @@ export class DataCollectorService {
     }
 
     getAllCourses() {
-        firebase.database().ref('courses').once('value', snapshot => {
+        firebase.database().ref('courses').on('value', snapshot => {
             this.courses = [];
             snapshot.forEach((node) => {
                 const course = node.val();
@@ -67,29 +68,26 @@ export class DataCollectorService {
     }
 
     getStudentCurse() {
-        firebase.database().ref('student_course').once('value', snapshot => {
+        firebase.database().ref('student_course').on('value', snapshot => {
             this.studentCourses = [];
             snapshot.forEach((node) => {
                 const sc = node.val();
                 sc.key = node.val().key;
                 this.studentCourses.push(sc);
             });
-        }).then(res => {
-        }).catch(err => {
-            console.log(err);
+            this.studentsOfCourses =  this.createGroups(this.studentCourses, `courseKey`);
         });
     }
 
     getTeacherCurse() {
-        firebase.database().ref('teacher_course').once('value', snapshot => {
+        firebase.database().ref('teacher_course').on('value', snapshot => {
             this.teacherCourses = [];
             snapshot.forEach((node) => {
                 const tc = node.val();
                 tc.key = node.val().key;
                 this.teacherCourses.push(tc);
             });
-        }).then(res => {
-        }).catch(err => console.log(err));
+        });
     }
 
     getCoursesByStudentId(studentId) {
@@ -115,16 +113,13 @@ export class DataCollectorService {
     }
 
     getAllQuizzes() {
-        firebase.database().ref('quizzes').once('value', snapshot => {
+        firebase.database().ref('quizzes').on('value', snapshot => {
             this.quizzes = [];
             snapshot.forEach((node) => {
                 const q = node.val();
                 q.key = node.val().key;
                 this.quizzes.push(q);
             });
-        }).then(res => {
-        }).catch(err => {
-            console.log(err);
         });
     }
 
@@ -132,8 +127,12 @@ export class DataCollectorService {
         return this.quizzes.filter(q => q.courseKey === key);
     }
 
+    filterStudentsOfCourses(key) {
+        this.studentCourses.filter(q => q.courseKey === key);
+    }
+
     getAllAttemptedQuizez() {
-        firebase.database().ref('attemptQuizzes').once('value', snapshot => {
+        firebase.database().ref('attemptQuizzes').on('value', snapshot => {
             this.attemptQuizez = [];
             const user: any = JSON.parse(localStorage.getItem('user'));
             snapshot.forEach((node) => {
@@ -145,9 +144,24 @@ export class DataCollectorService {
                 }
                 console.log('---------------', this.myAttemptQuizez);
             });
-        }).then(res => {
-        }).catch(err => {
-            console.log(err);
         });
+    }
+
+    createGroups(array, keyName): any {
+        const result: any = array.reduce((r, a) => {
+            r[a[`${keyName}`]] = r[a[`${keyName}`]] || [];
+            r[a[`${keyName}`]].push(a);
+            return r;
+        }, Object.create(null));
+        console.log('00000000000000', result);
+        const resultArray = Object.keys(result).map((courseIndex) => {
+            const course = result[courseIndex];
+            return course;
+        });
+        resultArray.forEach((cours, index) => {
+            cours.courseKey = cours[index].key;
+        });
+        console.log('grouped courses for no of students.: ', resultArray);
+        return resultArray;
     }
 }

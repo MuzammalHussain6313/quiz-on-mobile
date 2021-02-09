@@ -139,7 +139,7 @@ export class QuizBankPage implements OnInit {
     }
 
     addMCQ() {
-        debugger
+        
         this.questions.push(this.mcqForm.value);
         this.mcqForm.reset();
         this.shortQForm.reset();
@@ -148,7 +148,7 @@ export class QuizBankPage implements OnInit {
     }
 
     addFIB() {
-        debugger
+        
         this.questions.push(this.FIBForm.value);
         this.mcqForm.reset();
         this.shortQForm.reset();
@@ -157,7 +157,7 @@ export class QuizBankPage implements OnInit {
     }
 
     addSQ() {
-        debugger
+        
         this.questions.push(this.shortQForm.value);
         this.mcqForm.reset();
         this.shortQForm.reset();
@@ -166,7 +166,7 @@ export class QuizBankPage implements OnInit {
     }
 
     addTF() {
-        debugger
+        
         this.questions.push(this.TFForm.value);
         this.mcqForm.reset();
         this.shortQForm.reset();

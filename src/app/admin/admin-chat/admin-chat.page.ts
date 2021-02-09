@@ -31,8 +31,8 @@ export class AdminChatPage implements OnInit {
         const ref = 'admin-' + this.selectedEmail.split('.').join('');
         firebase.database().ref(`chat/${ref}/messages`).orderByChild('time').on('value', snapshot => {
             this.messages = [];
-            // tslint:disable-next-line:no-debugger
-            debugger;
+            // tslint:disable-next-line:no-
+            ;
             snapshot.forEach((node) => {
                 this.messages.push(node.val());
                 console.log(this.messages);

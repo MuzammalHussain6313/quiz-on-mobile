@@ -47,6 +47,7 @@ export class Tab1Page implements OnInit {
             this.loading = true;
         }
     }
+
     loadDataAgain(event) {
         this.allCourses = this.dataCollector.courses;
         if (this.user.isStudent) {
@@ -64,6 +65,7 @@ export class Tab1Page implements OnInit {
             }
         }, 2000);
     }
+
     async joinClass() {
         const alert = await this.alertController.create({
             cssClass: 'my-custom-class',
@@ -113,6 +115,10 @@ export class Tab1Page implements OnInit {
         this.navCtrl.navigateForward(['/add-course']);
     }
 
+    getNoOfStudents(key) {
+        const noOfStudents = this.dataCollector.filterStudentsOfCourses(key);
+        return noOfStudents;
+    }
     goToDetail(course) {
         localStorage.setItem('course', JSON.stringify(course));
         this.navCtrl.navigateForward(['/course-detail']);

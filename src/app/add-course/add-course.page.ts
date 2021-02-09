@@ -38,15 +38,15 @@ export class AddCoursePage implements OnInit {
 
     async addCourse() {
         this.utils.presentLoading('please wait...');
-        const randomstring = Math.random().toString(36).slice(-8);
+        // const randomstring = Math.random().toString(36).slice(-8);
         const key = firebase.database().ref('courses').push().key;
         const course = this.courseForm.value;
         course.key = key;
-        course.joingCode = randomstring;
+        // course.joingCode = randomstring;
         firebase.database().ref(`courses/${key}`).set(course).then(res => {
             this.utils.stopLoading();
             this.assignCourseInDatabase(key);
-            this.utils.presentAlert(`Course successfully created. ${randomstring} is courses code to join the course. please share this course code with students`);
+            this.utils.presentAlert(`Course successfully created. ${course.courseCode} is courses code to join the course. please share this course code with students`);
             console.log('data inserted res:', res);
             this.navCtrl.back();
         }).catch(err => {
